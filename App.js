@@ -1,19 +1,63 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-import {Button, Provider, Toast } from '@ant-design/react-native';
+import { AppRegistry, Text, View } from 'react-native';
+import { Button, Provider, Toast, Icon, SearchBar, TabBar } from '@ant-design/react-native';
 
-import {QuickStart} from './ui-src';
+import { QuickStart } from './ui-src';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab: 'quickStartTab',
+    };
+  }
+  renderContent(pageText) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', backgroundColor: 'white' }}>
+        <Text style={{ margin: 50 }}>{pageText}</Text>
+      </View>
+    );
+  }
+  onChangeTab(tabName) {
+    this.setState({
+      selectedTab: tabName,
+    });
+  }
   render() {
-    return(
+    return (
       <Provider>
-        <QuickStart/>
-
-        <Button onPress={() => Toast.info('This is a toast tips')}>
-          Start
-        </Button>
+        <TabBar
+          unselectedTintColor="#949494"
+          tintColor="#33A3F4"
+          barTintColor="#f5f5f5"
+        >
+          <TabBar.Item
+            title="快速开始"
+            icon={<Icon name="edit" />}
+            selected={this.state.selectedTab === 'quickStartTab'}
+            onPress={() => this.onChangeTab('quickStartTab')}
+          >
+            <QuickStart></QuickStart>
+          </TabBar.Item>
+          <TabBar.Item
+            icon={<Icon name="table" />}
+            title="练习记录"
+            selected={this.state.selectedTab === 'exerciseRecordTab'}
+            onPress={() => this.onChangeTab('exerciseRecordTab')}
+          >
+            {this.renderContent('exerciseRecord Tab')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={<Icon name="area-chart" />}
+            title="练习统计"
+            selected={this.state.selectedTab === 'exerciseStatisticsTab'}
+            onPress={() => this.onChangeTab('exerciseStatisticsTab')}
+          >
+            {this.renderContent('exerciseStatistics Tab')}
+          </TabBar.Item>
+        </TabBar>
       </Provider>
-    )
+
+    );
   }
 }
