@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
 import Button from '@ant-design/react-native/lib/button';
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return <Button>Start</Button>;
   }
