@@ -19,29 +19,37 @@ export default class QuickStart extends Component {
   };
 
 
-  confirm = ()=>{
-    const {opAdd,opSub,opMul,opDiv,maxNum,itemAmount} = this.state;
+  confirm = () => {
+    const { opAdd, opSub, opMul, opDiv, maxNum, itemAmount } = this.state;
     let ops = [];
-    if(opAdd){
+    if (opAdd) {
       ops.push("add");
     }
-    if(opSub){
+    if (opSub) {
       ops.push("sub");
     }
-    if(opMul){
+    if (opMul) {
       ops.push("mul");
     }
-    if(opDiv){
+    if (opDiv) {
       ops.push("div");
     }
-    if(ops.length==0){
-      Toast.fail('至少选择一种运算符',1)
+    if (ops.length == 0) {
+      Toast.fail('至少选择一种运算符', 1)
       return;
     }
     console.log("ops", ops);
     console.log("maxNum", maxNum);
     console.log("itemAmount", itemAmount);
-    
+
+    var { NativeModules } = require('react-native');
+    var rnToastAndroid = NativeModules.RNTestMethod;
+
+    rnToastAndroid.show("我的万能JS", function (args) {
+      console.log("rn java call back", args)
+      alert(args)
+    });
+
   }
 
   render() {
@@ -105,7 +113,7 @@ export default class QuickStart extends Component {
               <Text style={styles.titleText} >运算最大值
               </Text>
               <PickerView
-                onChange={(item) => { this.setState({ maxNum: item[0] });}}
+                onChange={(item) => { this.setState({ maxNum: item[0] }); }}
                 value={[this.state.maxNum]}
                 data={[[{ label: '10 以内', value: 10 }, { label: '20 以内', value: 20 }, { label: '50 以内', value: 50 }, { label: '100 以内', value: 100 }]]}
                 cascade={false} />
@@ -117,7 +125,7 @@ export default class QuickStart extends Component {
               {/* <Button style={styles.titleText} onPress={() => { Toast.info("例如：进行10以内加减法，则输入10") }}><Icon name="question-circle-o" /></Button> */}
               </Text>
               <PickerView
-                onChange={(item) => { this.setState({ itemAmount: item[0] });}}
+                onChange={(item) => { this.setState({ itemAmount: item[0] }); }}
                 value={[this.state.itemAmount]}
                 data={[[{ label: '10题', value: 10 }, { label: '20题', value: 20 }, { label: '50题', value: 50 }]]}
                 cascade={false} />
