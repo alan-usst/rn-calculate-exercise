@@ -184,10 +184,14 @@ android {
 }
 
 dependencies {
+    implementation 'com.alibaba:fastjson:1.1.54.android'
+    implementation 'org.projectlombok:lombok:1.16.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation 'org.projectlombok:lombok'
+    implementation 'org.projectlombok:lombok'
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
