@@ -41,43 +41,39 @@ export default class Home extends Component {
   }
 
   render() {
-    if (this.state.tabBarVisiable) {
-      return (
-        <Provider>
-          <TabBar
-            unselectedTintColor="#949494"
-            tintColor="#33A3F4"
-            barTintColor="#f5f5f5"
+    return (
+      <Provider>
+        <TabBar
+          unselectedTintColor="#949494"
+          tintColor="#33A3F4"
+          barTintColor="#f5f5f5"
+        >
+          <TabBar.Item
+            title="快速开始"
+            icon={<Icon name="edit" />}
+            selected={this.state.selectedTab === 'quickStartTab'}
+            onPress={() => this.onChangeTab('quickStartTab')}
           >
-            <TabBar.Item
-              title="快速开始"
-              icon={<Icon name="edit" />}
-              selected={this.state.selectedTab === 'quickStartTab'}
-              onPress={() => this.onChangeTab('quickStartTab')}
-            >
-              <QuickStart showTabBar={this.showTabBar} hideTabBar={this.hideTabBar}></QuickStart>
-            </TabBar.Item>
-            <TabBar.Item
-              icon={<Icon name="table" />}
-              title="练习记录"
-              selected={this.state.selectedTab === 'exerciseRecordTab'}
-              onPress={() => this.onChangeTab('exerciseRecordTab')}
-            >
-              {this.renderContent('exerciseRecord Tab')}
-            </TabBar.Item>
-            <TabBar.Item
-              icon={<Icon name="area-chart" />}
-              title="练习统计"
-              selected={this.state.selectedTab === 'exerciseStatisticsTab'}
-              onPress={() => this.onChangeTab('exerciseStatisticsTab')}
-            >
-              {this.renderContent('exerciseStatistics Tab')}
-            </TabBar.Item>
-          </TabBar>
-        </Provider>
-      );
-    } else{
-      return(<QuickStartDetail/>)
-    }
+            <QuickStart showTabBar={this.showTabBar} hideTabBar={this.hideTabBar}></QuickStart>
+          </TabBar.Item>
+          <TabBar.Item
+            icon={<Icon name="table" />}
+            title="练习记录"
+            selected={this.state.selectedTab === 'exerciseRecordTab'}
+            onPress={() => this.onChangeTab('exerciseRecordTab')}
+          >
+            {this.renderContent('exerciseRecord Tab')}
+          </TabBar.Item>
+          <TabBar.Item
+            icon={<Icon name="area-chart" />}
+            title="练习统计"
+            selected={this.state.selectedTab === 'exerciseStatisticsTab'}
+            onPress={() => this.onChangeTab('exerciseStatisticsTab')}
+          >
+            {this.renderContent('exerciseStatistics Tab')}
+          </TabBar.Item>
+        </TabBar>
+      </Provider>
+    );
   }
 }
