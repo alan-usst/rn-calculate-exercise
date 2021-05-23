@@ -5,16 +5,16 @@ import { Button, Toast, Flex, WingBlank, Checkbox, Icon } from '@ant-design/reac
 const CheckboxItem = Checkbox.CheckboxItem;
 
 export default class QuickStartDetail extends Component {
-
-  state = {
-
+  constructor (props) {
+    super(props)
+    this.state = {
+      recordId: props.route.params.recordId
   };
-
-
+}
   render() {
     return (
       <Button onPress={() => Toast.info('This is a toast tips')}>
-                QuickStartDetail
+                {this.state.recordId}
               </Button>
       
 
