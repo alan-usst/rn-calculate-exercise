@@ -4,7 +4,7 @@ import { AppRegistry, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, Provider, Toast, Icon, SearchBar, TabBar } from '@ant-design/react-native';
-import { Home } from './ui-src';
+import { Home, QuickStartDetail } from './ui-src';
 
 const Stack = createStackNavigator();
 
@@ -13,10 +13,15 @@ export default class App extends Component {
     return (
       <NavigationContainer>
         <Stack.Navigator
-          initialRouteName="Home">
+          initialRouteName="home">
           <Stack.Screen
-            name="Home"
+            name="home"
+            options={{ title: null }}
             component={Home} />
+          <Stack.Screen
+            name="qs_detail"
+            options={{ title: null}}
+            component={QuickStartDetail} />
         </Stack.Navigator>
       </NavigationContainer>
     );
