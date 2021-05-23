@@ -6,9 +6,6 @@ import QuickStart from './qs/QuickStart';
 import QuickStartDetail from './qs/QuickStartDetail';
 
 export default class Home extends Component {
-  static navigationOptions = {
-    title: 'Welcome',
-  };
   constructor(props) {
     super(props);
     this.state = {
@@ -34,10 +31,8 @@ export default class Home extends Component {
     this.setState({ tabBarVisiable: true });
   }
 
-  // 隐藏tabBar
-  hideTabBar = () => {
-    console.log("hide origin");
-    this.setState({ tabBarVisiable: false });
+  go2detail = () => {
+    console.log("go2detail");
   }
 
   render() {
@@ -54,7 +49,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'quickStartTab'}
             onPress={() => this.onChangeTab('quickStartTab')}
           >
-            <QuickStart/>
+            <QuickStart navigation={this.props.navigation}/>
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="table" />}

@@ -5,18 +5,18 @@ import { Button, Toast, Flex, WingBlank, Checkbox, Icon, PickerView } from '@ant
 const CheckboxItem = Checkbox.CheckboxItem;
 
 export default class QuickStart extends Component {
-  // static propTypes = {
-  //   hideTabBar: React.PropTypes.func().isRequired,
-  //   showTabBar: React.PropTypes.func().isRequired
-  // };
-  state = {
-    opAdd: false,
-    opSub: false,
-    opMul: false,
-    opDiv: false,
-    maxNum: 10,
-    itemAmount: 10
-  };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      opAdd: false,
+      opSub: false,
+      opMul: false,
+      opDiv: false,
+      maxNum: 10,
+      itemAmount: 10
+    };
+  }
 
 
   confirm = () => {
@@ -44,10 +44,12 @@ export default class QuickStart extends Component {
 
     const { NativeModules } = require('react-native');
     const QuickStartAPI = NativeModules.QuickStartAPI;
-
+    const {navigation} = this.props;
     QuickStartAPI.createRecord(ops, maxNum, itemAmount, function (args) {
       console.log("rn java call back, 新增的记录id", args)
-      alert(args)
+      // 回调方法中调用组件的props 得到的都是null
+      // this.props.navigation.navigate('qs_detail');
+      navigation.navigate('qs_detail');
     });
 
   }
