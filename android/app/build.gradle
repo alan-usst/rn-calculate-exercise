@@ -182,6 +182,7 @@ android {
         }
     }
 }
+android.defaultConfig.javaCompileOptions.annotationProcessorOptions.includeCompileClasspath = true
 
 dependencies {
     implementation 'com.alibaba:fastjson:1.1.54.android'

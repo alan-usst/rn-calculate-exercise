@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor(suppressConstructorProperties = true)
 public class Item {
     // 题目序号
     private Integer index;
@@ -25,6 +22,19 @@ public class Item {
 
     // 当前题目状态(默认为未做状态)
     private Status status = Status.UNDO;
+
+    public Item(Integer index, Integer n1, Integer n2, OP op, Integer rightAnswer, Integer filledNum, Status status) {
+        this.index = index;
+        this.n1 = n1;
+        this.n2 = n2;
+        this.op = op;
+        this.rightAnswer = rightAnswer;
+        this.filledNum = filledNum;
+        this.status = status;
+    }
+
+    public Item() {
+    }
 
     /**
      * 生成等式字符串
@@ -87,5 +97,61 @@ public class Item {
             }
         }
         this.rightAnswer = ans;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public Integer getN1() {
+        return n1;
+    }
+
+    public Integer getN2() {
+        return n2;
+    }
+
+    public OP getOp() {
+        return op;
+    }
+
+    public Integer getRightAnswer() {
+        return rightAnswer;
+    }
+
+    public Integer getFilledNum() {
+        return filledNum;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public void setN1(Integer n1) {
+        this.n1 = n1;
+    }
+
+    public void setN2(Integer n2) {
+        this.n2 = n2;
+    }
+
+    public void setOp(OP op) {
+        this.op = op;
+    }
+
+    public void setRightAnswer(Integer rightAnswer) {
+        this.rightAnswer = rightAnswer;
+    }
+
+    public void setFilledNum(Integer filledNum) {
+        this.filledNum = filledNum;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

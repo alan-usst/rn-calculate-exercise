@@ -3,8 +3,6 @@ package com.myapp.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
-@AllArgsConstructor
 public enum OP {
     /**
      * 运算操作
@@ -14,10 +12,18 @@ public enum OP {
     MUL("×"),
     DIV("÷");
 
+    OP(String s){
+        this.symbol = s;
+
+    }
     /**
      * 符号
      */
     private final String symbol;
+
+    public String getSymbol(){
+        return this.symbol;
+    }
 
     /**
      * 通过字符串获得对应枚举操作符
