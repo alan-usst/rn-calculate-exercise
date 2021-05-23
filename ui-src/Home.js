@@ -54,7 +54,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'quickStartTab'}
             onPress={() => this.onChangeTab('quickStartTab')}
           >
-            <QuickStart showTabBar={this.showTabBar} hideTabBar={this.hideTabBar}></QuickStart>
+            <QuickStart/>
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="table" />}

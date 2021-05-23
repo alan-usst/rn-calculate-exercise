@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Button, Provider, Toast, Icon, SearchBar, TabBar } from '@ant-design/react-native';
 import { Home, QuickStartDetail } from './ui-src';
+import PickerViewExample from './PickerViewExample';
 
 const Stack = createStackNavigator();
 
@@ -20,8 +21,13 @@ export default class App extends Component {
             component={Home} />
           <Stack.Screen
             name="qs_detail"
-            options={{ title: null}}
+            options={{ title: null }}
             component={QuickStartDetail} />
+
+          <Stack.Screen
+            name="test"
+            options={{ title: null }}
+            component={PickerViewExample} />
         </Stack.Navigator>
       </NavigationContainer>
     );

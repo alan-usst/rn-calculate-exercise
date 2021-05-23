@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, StyleSheet, TextInput } from 'react-native';
-import { Button, Toast, Flex, WingBlank, Checkbox, Icon } from '@ant-design/react-native';
+import { Button, Toast, Flex, WingBlank, Checkbox, Icon, PickerView } from '@ant-design/react-native';
 
 const CheckboxItem = Checkbox.CheckboxItem;
 
@@ -15,30 +15,55 @@ export default class QuickStart extends Component {
     opMul: false,
     opDiv: false,
     maxNum: 10,
-    agreeItem1: true,
-    checkboxItem1: true,
+    itemAmount: 10
   };
 
+
+  confirm = ()=>{
+    const {opAdd,opSub,opMul,opDiv,maxNum,itemAmount} = this.state;
+    let ops = [];
+    if(opAdd){
+      ops.push("add");
+    }
+    if(opSub){
+      ops.push("sub");
+    }
+    if(opMul){
+      ops.push("mul");
+    }
+    if(opDiv){
+      ops.push("div");
+    }
+    if(ops.length==0){
+      Toast.fail('至少选择一种运算符',1)
+      return;
+    }
+    console.log("ops", ops);
+    console.log("maxNum", maxNum);
+    console.log("itemAmount", itemAmount);
+    
+  }
 
   render() {
     return (
       // <Button onPress={() => Toast.info('This is a toast tips')}>
       //           QuickStart
       //         </Button>
+
       <ScrollView
         style={{ flex: 1 }}
         automaticallyAdjustContentInsets={false}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
 
-        <WingBlank style={{ marginBottom: 20, marginTop: 20 }}>
+        <WingBlank style={{ marginBottom: 0, marginTop: 0 }}>
           <Flex direction="column" >
 
             {/* 运算类型 */}
-            <Flex.Item style={{ paddingTop: 30 }}>
+            <Flex.Item style={{ paddingTop: 0 }}>
               <Text style={styles.titleText} >运算类型</Text>
             </Flex.Item>
-            <Flex.Item style={{ paddingTop: 20 }}>
+            <Flex.Item style={{ paddingTop: 10 }}>
               <Flex direction="row" automaticallyAdjustContentInsets={true} style={{ paddingLeft: 10, paddingRight: 10 }}>
                 <Checkbox
                   checked={this.state.opAdd}
@@ -76,22 +101,36 @@ export default class QuickStart extends Component {
             </Flex.Item>
 
             {/* 最大运算值 */}
-            <Flex.Item style={{ paddingTop: 50}}>
-              <Text style={styles.titleText} >运算最大值<Button onPress={()=>{Toast.info("例如：进行10以内加减法，则输入10。最大不超过999")}}><Icon name="question-circle-o" /></Button></Text>
-              <TextInput style={styles.inputItem} defaultValue='10' maxLength={3} keyboardType="numeric" 
-              onBlur={event=>{this.setState({maxNum:event.text}); 
-              this.props.showTabBar();
-            }}
-              onFocus={event=>{
-                this.props.hideTabBar();}}
-              />
+            <Flex.Item style={{ paddingTop: 20 }}>
+              <Text style={styles.titleText} >运算最大值
+              </Text>
+              <PickerView
+                onChange={(item) => { this.setState({ maxNum: item[0] });}}
+                value={[this.state.maxNum]}
+                data={[[{ label: '10 以内', value: 10 }, { label: '20 以内', value: 20 }, { label: '50 以内', value: 50 }, { label: '100 以内', value: 100 }]]}
+                cascade={false} />
             </Flex.Item>
-            <Flex.Item style={{ paddingBottom: 4 }}>
-              <Button size="small">按钮2</Button>
+
+            {/* 题量 */}
+            <Flex.Item style={{ paddingTop: 20 }}>
+              <Text style={styles.titleText} >题量
+              {/* <Button style={styles.titleText} onPress={() => { Toast.info("例如：进行10以内加减法，则输入10") }}><Icon name="question-circle-o" /></Button> */}
+              </Text>
+              <PickerView
+                onChange={(item) => { this.setState({ itemAmount: item[0] });}}
+                value={[this.state.itemAmount]}
+                data={[[{ label: '10题', value: 10 }, { label: '20题', value: 20 }, { label: '50题', value: 50 }]]}
+                cascade={false} />
             </Flex.Item>
-            <Flex.Item style={{ paddingBottom: 4 }}>
-              <Button size="small">按钮3</Button>
+
+            {/* 确认按钮 */}
+            <Flex.Item style={{ paddingTop: 0 }}>
+              <Button type="primary"
+                onPress={this.confirm}>
+                开    始
+            </Button>
             </Flex.Item>
+
           </Flex>
         </WingBlank>
       </ScrollView>
@@ -105,11 +144,6 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1
   },
-  container: {
-    marginTop: 35,
-    marginLeft: 5,
-    marginRight: 5,
-  },
   checkedOp: {
     transform: [{ scaleX: 2 }, { scaleY: 2 }],
     color: 'blue',
@@ -120,13 +154,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingLeft: 10,
     paddingRight: 30
-  },
-  inputItem: {
-    marginTop:10,
-    fontSize: 30,
-    textAlign: 'center',
-    borderWidth: 1,
-    borderColor: 'black'
   },
   titleText: {
     color: '#FF7700',
