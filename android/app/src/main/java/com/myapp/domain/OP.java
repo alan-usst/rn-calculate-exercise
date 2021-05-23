@@ -1,5 +1,8 @@
 package com.myapp.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -45,5 +48,19 @@ public enum OP {
 
         }
         return null;
+    }
+
+    public static List<OP> getByStrings(List<Object> inputs){
+        List<OP> res = new ArrayList<>();
+        for(Object input: inputs){
+            if(input instanceof String){
+                for(OP item: OP.values()){
+                    if(item.name().equalsIgnoreCase((String)input)){
+                        res.add(item);
+                    }
+                }
+            }
+        }
+        return res;
     }
 }

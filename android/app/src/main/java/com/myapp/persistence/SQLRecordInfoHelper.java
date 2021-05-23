@@ -9,9 +9,10 @@ public class SQLRecordInfoHelper  extends SQLiteOpenHelper {
     public static final String CREATE_RECORD_INFO = "create table record ( "
             + "id integer primary key autoincrement,"
             + "createTime text,"
-            + "itemAmount integer,"
             + "maxNum integer,"
-            + "statistics text,"
+            + "itemAmount integer,"
+            + "rightCount integer,"
+            + "wrongCount integer,"
             + "items text)";
 
     private Context context;

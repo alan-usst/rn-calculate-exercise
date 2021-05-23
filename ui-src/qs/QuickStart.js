@@ -23,16 +23,16 @@ export default class QuickStart extends Component {
     const { opAdd, opSub, opMul, opDiv, maxNum, itemAmount } = this.state;
     let ops = [];
     if (opAdd) {
-      ops.push("add");
+      ops.push("ADD");
     }
     if (opSub) {
-      ops.push("sub");
+      ops.push("SUB");
     }
     if (opMul) {
-      ops.push("mul");
+      ops.push("MUL");
     }
     if (opDiv) {
-      ops.push("div");
+      ops.push("DIV");
     }
     if (ops.length == 0) {
       Toast.fail('至少选择一种运算符', 1)
@@ -42,11 +42,11 @@ export default class QuickStart extends Component {
     console.log("maxNum", maxNum);
     console.log("itemAmount", itemAmount);
 
-    var { NativeModules } = require('react-native');
-    var rnToastAndroid = NativeModules.RNTestMethod;
+    const { NativeModules } = require('react-native');
+    const QuickStartAPI = NativeModules.QuickStartAPI;
 
-    rnToastAndroid.show("我的万能JS", function (args) {
-      console.log("rn java call back", args)
+    QuickStartAPI.createRecord(ops, maxNum, itemAmount, function (args) {
+      console.log("rn java call back, 新增的记录id", args)
       alert(args)
     });
 
