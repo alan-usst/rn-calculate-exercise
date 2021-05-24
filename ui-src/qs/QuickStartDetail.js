@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, StyleSheet, Menu, View, DrawerLayoutAndroid, TouchableHighlight, Dimensions } from 'react-native';
-import { Button, Toast, Flex, WingBlank, List, InputItem, Icon } from '@ant-design/react-native';
+import { ScrollView, Text, View, DrawerLayoutAndroid } from 'react-native';
+import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider } from '@ant-design/react-native';
 import { QuickStartAPI } from '@api';
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -32,7 +32,7 @@ export default class QuickStartDetail extends Component {
   refreshState = (recordDetailStr) => {
     let recordDetail = JSON.parse(recordDetailStr);
     let itemDetail = this.getItemDetail(recordDetail);
-    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, statisticsInfo: recordDetail.statisticsInfo, filledAnswer: itemDetail.filledAnswer});
+    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, statisticsInfo: recordDetail.statisticsInfo, filledAnswer: itemDetail.filledAnswer });
   }
 
   componentDidMount = () => {
@@ -56,17 +56,17 @@ export default class QuickStartDetail extends Component {
   }
 
   // 变更题目
-  changeItem = (itemIndex)=>{
+  changeItem = (itemIndex) => {
     let itemDetail = this.getItemDetailWithIndex(this.state.recordDetail, itemIndex);
-    this.setState({itemIndex:itemIndex, itemDetail: itemDetail, filledAnswer: itemDetail.filledAnswer});
-    this.drawer.openDrawer();
+    this.setState({ itemIndex: itemIndex, itemDetail: itemDetail, filledAnswer: itemDetail.filledAnswer });
+    this.drawer.closeDrawer();
   }
 
   genSingleItemInList = (item) => {
     // 题目列表中的状态，答对的为绿色，答错为红色
-    let statusColor = item.status == "RIGHT" ? "#00ca00" : (item.status == "WRONG" ? "#f00" : "#b0b5bd");
+    let statusColor = item.status == "RIGHT" ? "#07bd09" : (item.status == "WRONG" ? "#e10305" : "#b0b5bd");
     return (
-      <Item key={item.index} onPress={()=>this.changeItem(item.index)}>
+      <Item key={item.index} onPress={() => this.changeItem(item.index)}>
         <View style={{ flexDirection: 'row', color: statusColor }}>
           <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {this.getOpStr(item.op)} {item.n2}</Text>
         </View>
@@ -84,7 +84,7 @@ export default class QuickStartDetail extends Component {
       >
         <List>
           <Item key={"title"}>
-              <Text>题目序号              内容 </Text>
+            <Text>题目序号              内容 </Text>
           </Item>
           {items.map(element => {
             return this.genSingleItemInList(element);
@@ -94,61 +94,141 @@ export default class QuickStartDetail extends Component {
     }
   }
 
+  // 消息提示栏-下一题
+  goToNextItem=()=>{
+    this.changeItem(this.state.itemIndex+1);
+  }
+
+  // 键盘输入回调
+  numInput = (num) => {
+    const { filledAnswer, itemDetail } = this.state;
+    if(itemDetail.status == "RIGHT"){
+      Toast.info("当前题目已经回答正确，请勿重复解答");
+      return;
+    }
+    if (num == "delete") {
+      if (filledAnswer != null) {
+        if (filledAnswer < 10) {
+          this.setState({ filledAnswer: null });
+        } else {
+          this.setState({ filledAnswer: Math.round(filledAnswer/10)  });
+        }
+      }
+    } else if (num == "confirm") {
+      console.log("confirm", filledAnswer);
+    } else {
+      if (filledAnswer == null) {
+        this.setState({ filledAnswer: num });
+      } else if (filledAnswer > 10000) {
+        Toast.fail('结果长度过长，请删除一些再输入', 1);
+      } else {
+        this.setState({ filledAnswer: filledAnswer * 10 + num });
+      }
+    }
+  }
+
   render() {
-    const { itemDetail, filledAnswer } = this.state;
+    const { itemDetail, filledAnswer, itemIndex, recordDetail} = this.state;
+    // 计算提示栏的样式和提示内容
+    // 是否展示下一题的按钮
+    let ifShowNextItem = false;
+    let msgColor = "black";
+    let msgContent = null;
+    if(itemDetail!=null && itemDetail.status!="UNDO"){
+      if(itemDetail.status=="RIGHT"){
+        msgColor = "#07bd09";
+        msgContent = "回答正确!";
+        ifShowNextItem = itemIndex<recordDetail.itemAmount;
+      }else{
+        msgColor = "#e10305";
+        msgContent = "答错啦，再好好想想";
+      }
+    }
     return (
-      <DrawerLayoutAndroid
-        ref={(drawer) => { this.drawer = drawer; }}
-        drawerWidth={200}
-        drawerPosition={"right"}
-        renderNavigationView={() => this.genItemList()}>
-        <ScrollView
-          // style={{ flex: 1 }}
-          automaticallyAdjustContentInsets={false}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-        <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
-          <Flex direction="row" style={{ paddingTop: 20 }}>
-            <Flex.Item style={{ paddingLeft: 4 }}>
-              <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.total}</Text>
-            </Flex.Item>
-            <Flex.Item style={{ paddingLeft: 15 }}>
-              <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.rightCount}</Text>
-            </Flex.Item>
-            <Flex.Item style={{ paddingLeft: 4 }}>
-              <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.wrongCount}</Text>
-            </Flex.Item>
-            <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-              <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.undoCount}</Text>
-            </Flex.Item>
-          </Flex>
+      <Provider>
+        <DrawerLayoutAndroid
+          ref={(drawer) => { this.drawer = drawer; }}
+          drawerWidth={200}
+          drawerPosition={"right"}
+          renderNavigationView={() => this.genItemList()}>
+          <ScrollView
+            // style={{ flex: 1 }}
+            automaticallyAdjustContentInsets={false}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}>
+            <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
+              <Flex direction="row" style={{ paddingTop: 20 }}>
+                <Flex.Item style={{ paddingLeft: 4 }}>
+                  <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.total}</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 15 }}>
+                  <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.rightCount}</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4 }}>
+                  <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.wrongCount}</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                  <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.undoCount}</Text>
+                </Flex.Item>
+              </Flex>
 
-          <Flex direction="row" style={{ paddingTop: 50 }} justify='around' >
-            <Flex.Item >
-              <Text style={{ color: '#000', fontSize: 23, fontWeight: 'bold', textAlign: 'center' }}>当前第 {this.state.itemIndex} 题</Text>
-            </Flex.Item>
-            <Flex.Item style={{}}>
-              <Button onPress={() => {
-                this.drawer.openDrawer();
-              }}
-                type='ghost' size='large' style={{
-                  maxWidth: 150,
-                  minWidth: 100,
-                  wordWrap: 'break-word'
-                }}>查看题目列表</Button>
-            </Flex.Item>
-          </Flex>
-          {/*公式栏*/}
-          <View style={{paddingTop: 50, alignItems:'center', justifyContent:'center'}}>
-            <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${this.getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
-          </View> 
-        </WingBlank>
+              <Flex direction="row" style={{ paddingTop: 50 }} justify='around' >
+                <Flex.Item >
+                  <Text style={{ color: '#000', fontSize: 23, fontWeight: 'bold', textAlign: 'center' }}>当前第 {this.state.itemIndex} 题</Text>
+                </Flex.Item>
+                <Flex.Item style={{}}>
+                  <Button onPress={() => {
+                    this.drawer.openDrawer();
+                  }}
+                    type='ghost' size='large' style={{
+                      maxWidth: 150,
+                      minWidth: 100,
+                      wordWrap: 'break-word'
+                    }}>查看题目列表</Button>
+                </Flex.Item>
+              </Flex>
+              {/*公式栏*/}
+              <View style={{ paddingTop: 50, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${this.getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
+              </View>
 
-        </ScrollView>
-      </DrawerLayoutAndroid>
-
-
-
+              <View style={{ paddingTop: 30, justifyContent: 'center', flexDirection:'row'}}>
+                <Text style={{ color: msgColor, fontSize: 30, fontWeight: 'bold' }}>{msgContent}</Text> 
+                {ifShowNextItem?<Button onPress={this.goToNextItem} style={{marginLeft:40}}>下一题</Button>:null}
+              </View>
+            </WingBlank>
+          </ScrollView>
+          <Grid
+            data={[{ text: '1' }, { text: '2' }, { text: '3' }, { text: '4' }, { text: '5' }, { text: '6' }, { text: '7' }, { text: '8' }, { text: '9' }, { icon: 'double-left' }, { text: '0' }, { icon: 'check' }]}
+            columnNum={3}
+            onPress={(_el, index) => this.numInput(getNumByIndex(index))}
+            itemStyle={{ height: 100, borderColor: '#a9a6b2' }}
+            renderItem={(el, index) => {
+              let num = getNumByIndex(index);
+              if (num == "delete") {
+                return <Icon name="double-left" style={{ flex: 1, textAlignVertical: 'center', textAlign: 'center', backgroundColor: '#e10305', color: 'white' }} />;
+              } else if (num == "confirm") {
+                return <Icon name="check" style={{ flex: 1, textAlignVertical: 'center', textAlign: 'center', backgroundColor: '#07bd09', color: 'white' }} />
+              } else {
+                return <Text style={{ flex: 1, fontSize: 30, fontWeight: 'bold', textAlign: 'center', textAlignVertical: 'center' }}>{num}</Text>
+              }
+            }}
+          />
+        </DrawerLayoutAndroid>
+      </Provider>
     )
+  }
+}
+
+const getNumByIndex = (index) => {
+  if (index == 9) {
+    return "delete"
+  } else if (index == 11) {
+    return "confirm"
+  } else if (index == 10) {
+    return 0;
+  }
+  else {
+    return index + 1;
   }
 }
