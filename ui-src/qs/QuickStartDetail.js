@@ -18,16 +18,13 @@ export default class QuickStartDetail extends Component {
     };
   }
 
-
-  onOpenChange = isOpen => {
-    /* tslint:disable: no-console */
-    console.log('是否打开了 Drawer', isOpen.toString());
-  };
-
   getItemDetail = (recordDetail) => {
-    console.log("this.state.itemIndex", this.state.itemIndex);
+    return this.getItemDetailWithIndex(recordDetail, this.state.itemIndex);
+  }
+
+  getItemDetailWithIndex = (recordDetail, itemIndex) => {
     let tmp = recordDetail.items.filter((element, index, array) => {
-      return element.index == this.state.itemIndex
+      return element.index == itemIndex;
     });
     return tmp.length == 0 ? null : tmp[0];
   }
@@ -58,18 +55,24 @@ export default class QuickStartDetail extends Component {
     return "";
   }
 
+  // 变更题目
+  changeItem = (itemIndex)=>{
+    let itemDetail = this.getItemDetailWithIndex(this.state.recordDetail, itemIndex);
+    this.setState({itemIndex:itemIndex, itemDetail: itemDetail, filledAnswer: itemDetail.filledAnswer});
+    this.drawer.openDrawer();
+  }
+
   genSingleItemInList = (item) => {
     // 题目列表中的状态，答对的为绿色，答错为红色
     let statusColor = item.status == "RIGHT" ? "#00ca00" : (item.status == "WRONG" ? "#f00" : "#b0b5bd");
     return (
-      <Item key={item.index}>
+      <Item key={item.index} onPress={()=>this.changeItem(item.index)}>
         <View style={{ flexDirection: 'row', color: statusColor }}>
           <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {this.getOpStr(item.op)} {item.n2}</Text>
         </View>
       </Item>
     );
   }
-
   genItemList = () => {
     let items = this.state.recordDetail == null ? null : this.state.recordDetail.items;
     if (items != null) {
@@ -99,11 +102,11 @@ export default class QuickStartDetail extends Component {
         drawerWidth={200}
         drawerPosition={"right"}
         renderNavigationView={() => this.genItemList()}>
-        {/* <ScrollView
+        <ScrollView
           // style={{ flex: 1 }}
           automaticallyAdjustContentInsets={false}
           showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}> */}
+          showsVerticalScrollIndicator={false}>
         <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
           <Flex direction="row" style={{ paddingTop: 20 }}>
             <Flex.Item style={{ paddingLeft: 4 }}>
@@ -126,7 +129,6 @@ export default class QuickStartDetail extends Component {
             </Flex.Item>
             <Flex.Item style={{}}>
               <Button onPress={() => {
-                console.log("查看题目列表");
                 this.drawer.openDrawer();
               }}
                 type='ghost' size='large' style={{
@@ -141,7 +143,8 @@ export default class QuickStartDetail extends Component {
             <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${this.getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
           </View> 
         </WingBlank>
-        {/* </ScrollView> */}
+
+        </ScrollView>
       </DrawerLayoutAndroid>
 
 
