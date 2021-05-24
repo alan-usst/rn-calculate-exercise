@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, Text, StyleSheet, TextInput } from 'react-native';
 import { Button, Toast, Flex, WingBlank, Checkbox, Icon, PickerView } from '@ant-design/react-native';
 import a from '@ant-design/react-native/lib/modal/operation';
-import {QuickStartAPI} from '../../ApiManager'
+import {QuickStartAPI} from '@api';
 
 const CheckboxItem = Checkbox.CheckboxItem;
 
