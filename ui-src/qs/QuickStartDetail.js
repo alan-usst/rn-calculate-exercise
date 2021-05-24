@@ -3,7 +3,6 @@ import { ScrollView, Text, View, DrawerLayoutAndroid } from 'react-native';
 import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider } from '@ant-design/react-native';
 import { QuickStartAPI } from '@api';
 const Item = List.Item;
-const Brief = Item.Brief;
 
 export default class QuickStartDetail extends Component {
   constructor(props) {

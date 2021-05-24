@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View } from 'react-native';
-import { Button, Provider, Toast, Icon, SearchBar, ListView } from '@ant-design/react-native';
+import { Button, Provider, Toast, Icon, SearchBar, ListView, List } from '@ant-design/react-native';
+
+const Item = List.Item;
 
 export default class RecordList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            layout: 'list',
+            layout: 'grid',
         };
     }
 
@@ -18,7 +20,7 @@ export default class RecordList extends Component {
         abortFetch
     ) => {
         try {
-            let pageLimit = 30;
+            let pageLimit = 10;
             if (this.state.layout === 'grid') pageLimit = 60;
             const skip = (page - 1) * pageLimit;
 
@@ -43,9 +45,9 @@ export default class RecordList extends Component {
 
     renderItem = (item) => {
         return (
-            <View style={{ padding: 10 }}>
+            <Item style={{ padding: 10 }}>
                 <Text>{item}</Text>
-            </View>
+            </Item>
         );
     };
 
@@ -55,10 +57,10 @@ export default class RecordList extends Component {
                 <ListView
                     onFetch={this.onFetch}
                     keyExtractor={(item, index) =>
-                        `${this.state.layout} - ${item} - ${index}`
+                        item.id
                     }
                     renderItem={this.renderItem}
-                    numColumns={this.state.layout === 'list' ? 1 : 3}
+                    numColumns={1}
                 />
             </Provider>
         );
