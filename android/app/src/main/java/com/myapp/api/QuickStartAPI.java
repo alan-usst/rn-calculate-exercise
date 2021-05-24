@@ -4,6 +4,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.alibaba.fastjson.JSON;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -32,19 +33,31 @@ public class QuickStartAPI extends ReactContextBaseJavaModule {
         return "QuickStartAPI";
     }
 
+    /**
+     * 新增record
+     * @param opArray
+     * @param maxNum
+     * @param itemAmount
+     * @param callback
+     */
     @ReactMethod
-    public void show(String msg, Callback callback){
-        Toast.makeText(getReactApplicationContext(),"Js调用显示原生传递的参数是:"+msg,Toast.LENGTH_LONG).show();
-        callback.invoke("RNToastModule 调用JS方法");
-    }
-
-    @ReactMethod
-    public static void createRecord(ReadableArray opArray, int maxNum, int itemAmount, Callback callback) {
+    public static void addRecord(ReadableArray opArray, int maxNum, int itemAmount, Callback callback) {
 
         List<OP> ops = OP.getByStrings(opArray.toArrayList());
         // 创建记录
         Record record = RecordInfoFactory.genRecordInfo(new CreateRecordParam(ops, maxNum, itemAmount));
         record = RecordRepository.add(record);
         callback.invoke(Integer.valueOf(record.getId().toString()));
+    }
+
+    /**
+     * 根据id获取record详情
+     * @param recordId
+     * @param callback
+     */
+    @ReactMethod
+    public static void getRecordDetailById(int recordId, Callback callback) {
+        Record record = RecordRepository.getById((long)recordId);
+        callback.invoke(JSON.toJSONString(record));
     }
 }
