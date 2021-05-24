@@ -3,7 +3,7 @@ import { AppRegistry, Text, View } from 'react-native';
 import { Button, Provider, Toast, Icon, SearchBar, TabBar } from '@ant-design/react-native';
 
 import QuickStart from './qs/QuickStart';
-import QuickStartDetail from './qs/QuickStartDetail';
+import RecordList from './RecordList';
 
 export default class Home extends Component {
   constructor(props) {
@@ -54,10 +54,10 @@ export default class Home extends Component {
           <TabBar.Item
             icon={<Icon name="table" />}
             title="练习记录"
-            selected={this.state.selectedTab === 'exerciseRecordTab'}
-            onPress={() => this.onChangeTab('exerciseRecordTab')}
+            selected={this.state.selectedTab === 'recordListTab'}
+            onPress={() => this.onChangeTab('recordListTab')}
           >
-            {this.renderContent('exerciseRecord Tab')}
+            <RecordList/>
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="area-chart" />}

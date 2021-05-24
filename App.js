@@ -23,11 +23,6 @@ export default class App extends Component {
             name="qs_detail"
             options={{ title: null }}
             component={QuickStartDetail} />
-
-          <Stack.Screen
-            name="test"
-            options={{ title: null }}
-            component={PickerViewExample} />
         </Stack.Navigator>
       </NavigationContainer>
     );
