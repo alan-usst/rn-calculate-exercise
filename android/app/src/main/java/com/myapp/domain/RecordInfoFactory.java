@@ -40,7 +40,7 @@ public class RecordInfoFactory {
             count++;
             Item item = genRandomItem(param);
             // 去重尝试
-            int maxRetryTimes = 50;
+            int maxRetryTimes = 10;
             while ((item==null || items.contains(item)) && maxRetryTimes>0){
                 maxRetryTimes--;
                 item = genRandomItem(param);
@@ -59,7 +59,7 @@ public class RecordInfoFactory {
      * @return
      */
     private static Item genRandomItem(CreateRecordParam param){
-        int totalRetryTime = 20;
+        int totalRetryTime = 10;
         while(totalRetryTime>0){
             totalRetryTime--;
             // 随机获得操作符

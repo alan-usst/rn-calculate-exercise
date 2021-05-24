@@ -1,8 +1,6 @@
 package com.myapp.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.facebook.common.util.HashCodeUtil;
 
 public class Item {
     // 题目序号
@@ -18,22 +16,36 @@ public class Item {
     private Integer rightAnswer;
 
     // 已录入结果
-    private Integer filledNum;
+    private Integer filledAnswer;
 
     // 当前题目状态(默认为未做状态)
     private Status status = Status.UNDO;
 
-    public Item(Integer index, Integer n1, Integer n2, OP op, Integer rightAnswer, Integer filledNum, Status status) {
+    public Item(Integer index, Integer n1, Integer n2, OP op, Integer rightAnswer, Integer filledAnswer, Status status) {
         this.index = index;
         this.n1 = n1;
         this.n2 = n2;
         this.op = op;
         this.rightAnswer = rightAnswer;
-        this.filledNum = filledNum;
+        this.filledAnswer = filledAnswer;
         this.status = status;
     }
 
     public Item() {
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Item))
+            return false;
+        if (obj == this)
+            return true;
+        return this.toString().equals(obj.toString());
+    }
+
+    @Override
+    public int hashCode(){
+        return this.toString().hashCode();
     }
 
     /**
@@ -119,8 +131,8 @@ public class Item {
         return rightAnswer;
     }
 
-    public Integer getFilledNum() {
-        return filledNum;
+    public Integer getFilledAnswer() {
+        return filledAnswer;
     }
 
     public Status getStatus() {
@@ -147,8 +159,8 @@ public class Item {
         this.rightAnswer = rightAnswer;
     }
 
-    public void setFilledNum(Integer filledNum) {
-        this.filledNum = filledNum;
+    public void setFilledAnswer(Integer filledAnswer) {
+        this.filledAnswer = filledAnswer;
     }
 
     public void setStatus(Status status) {
