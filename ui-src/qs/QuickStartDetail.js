@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, StyleSheet, Menu, View, DrawerLayoutAndroid, TouchableHighlight } from 'react-native';
-import { Button, Toast, Flex, WingBlank, List, WhiteSpace, Icon } from '@ant-design/react-native';
+import { ScrollView, Text, StyleSheet, Menu, View, DrawerLayoutAndroid, TouchableHighlight, Dimensions } from 'react-native';
+import { Button, Toast, Flex, WingBlank, List, InputItem, Icon } from '@ant-design/react-native';
 import { QuickStartAPI } from '@api';
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -14,6 +14,7 @@ export default class QuickStartDetail extends Component {
       itemDetail: null,
       recordDetail: null,
       statisticsInfo: null,
+      filledAnswer: null
     };
   }
 
@@ -34,7 +35,7 @@ export default class QuickStartDetail extends Component {
   refreshState = (recordDetailStr) => {
     let recordDetail = JSON.parse(recordDetailStr);
     let itemDetail = this.getItemDetail(recordDetail);
-    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, statisticsInfo: recordDetail.statisticsInfo });
+    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, statisticsInfo: recordDetail.statisticsInfo, filledAnswer: itemDetail.filledAnswer});
   }
 
   componentDidMount = () => {
@@ -46,9 +47,9 @@ export default class QuickStartDetail extends Component {
 
   getOpStr = (opEnum) => {
     if (opEnum == "ADD") {
-      return "＋";
+      return "+";
     } else if (opEnum == "SUB") {
-      return "－";
+      return "-";
     } else if (opEnum == "MUL") {
       return "×";
     } else if (opEnum == "DIV") {
@@ -61,9 +62,9 @@ export default class QuickStartDetail extends Component {
     // 题目列表中的状态，答对的为绿色，答错为红色
     let statusColor = item.status == "RIGHT" ? "#00ca00" : (item.status == "WRONG" ? "#f00" : "#b0b5bd");
     return (
-      <Item key={item.index} onPress={() => { Toast.info("!2312312312") }}>
-        <View style={{ flexDirection: 'row', color: statusColor}}>
-          <Icon name="edit" style={{color: statusColor}}/><Text style={{color: statusColor}}>【{item.index}】      {item.n1}  {this.getOpStr(item.op)} {item.n2}</Text>
+      <Item key={item.index}>
+        <View style={{ flexDirection: 'row', color: statusColor }}>
+          <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {this.getOpStr(item.op)} {item.n2}</Text>
         </View>
       </Item>
     );
@@ -79,6 +80,9 @@ export default class QuickStartDetail extends Component {
         showsVerticalScrollIndicator={false}
       >
         <List>
+          <Item key={"title"}>
+              <Text>题目序号              内容 </Text>
+          </Item>
           {items.map(element => {
             return this.genSingleItemInList(element);
           })}
@@ -88,51 +92,56 @@ export default class QuickStartDetail extends Component {
   }
 
   render() {
+    const { itemDetail, filledAnswer } = this.state;
     return (
       <DrawerLayoutAndroid
         ref={(drawer) => { this.drawer = drawer; }}
         drawerWidth={200}
         drawerPosition={"right"}
         renderNavigationView={() => this.genItemList()}>
-        <ScrollView
+        {/* <ScrollView
           // style={{ flex: 1 }}
           automaticallyAdjustContentInsets={false}
           showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          <WingBlank style={{ marginBottom: 0, marginTop: 0 }}>
-            <Flex direction="row" style={{ paddingTop: 20 }}>
-              <Flex.Item style={{ paddingLeft: 4 }}>
-                <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.total}</Text>
-              </Flex.Item>
-              <Flex.Item style={{ paddingLeft: 15 }}>
-                <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.rightCount}</Text>
-              </Flex.Item>
-              <Flex.Item style={{ paddingLeft: 4 }}>
-                <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.wrongCount}</Text>
-              </Flex.Item>
-              <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.undoCount}</Text>
-              </Flex.Item>
-            </Flex>
+          showsVerticalScrollIndicator={false}> */}
+        <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
+          <Flex direction="row" style={{ paddingTop: 20 }}>
+            <Flex.Item style={{ paddingLeft: 4 }}>
+              <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.total}</Text>
+            </Flex.Item>
+            <Flex.Item style={{ paddingLeft: 15 }}>
+              <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.rightCount}</Text>
+            </Flex.Item>
+            <Flex.Item style={{ paddingLeft: 4 }}>
+              <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.wrongCount}</Text>
+            </Flex.Item>
+            <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+              <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.undoCount}</Text>
+            </Flex.Item>
+          </Flex>
 
-            <Flex direction="row" style={{ paddingTop: 30 }} justify='around' >
-              <Flex.Item >
-                <Text style={{ color: '#000', fontSize: 23, fontWeight: 'bold', textAlign: 'center' }}>当前第 {this.state.itemIndex} 题</Text>
-              </Flex.Item>
-              <Flex.Item style={{}}>
-                <Button onPress={() => {
-                  console.log("查看题目列表");
-                  this.drawer.openDrawer();
-                }}
-                  type='ghost' size='large' style={{
-                    maxWidth: 150,
-                    minWidth: 100,
-                    wordWrap: 'break-word'
-                  }}>查看题目列表</Button>
-              </Flex.Item>
-            </Flex>
-          </WingBlank>
-        </ScrollView>
+          <Flex direction="row" style={{ paddingTop: 50 }} justify='around' >
+            <Flex.Item >
+              <Text style={{ color: '#000', fontSize: 23, fontWeight: 'bold', textAlign: 'center' }}>当前第 {this.state.itemIndex} 题</Text>
+            </Flex.Item>
+            <Flex.Item style={{}}>
+              <Button onPress={() => {
+                console.log("查看题目列表");
+                this.drawer.openDrawer();
+              }}
+                type='ghost' size='large' style={{
+                  maxWidth: 150,
+                  minWidth: 100,
+                  wordWrap: 'break-word'
+                }}>查看题目列表</Button>
+            </Flex.Item>
+          </Flex>
+          {/*公式栏*/}
+          <View style={{paddingTop: 50, alignItems:'center', justifyContent:'center'}}>
+            <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${this.getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
+          </View> 
+        </WingBlank>
+        {/* </ScrollView> */}
       </DrawerLayoutAndroid>
 
 
