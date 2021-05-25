@@ -102,7 +102,7 @@ export default class QuickStart extends Component {
                     this.setState({ opDiv: event.target.checked });
                   }}
                 ><Text style={{
-                  color: 'blue',
+                  color: '#00c5e3',
                   fontSize: 30,
                   paddingLeft: 10
                 }}>÷</Text></Checkbox>
@@ -155,11 +155,11 @@ const styles = StyleSheet.create({
   },
   checkedOp: {
     transform: [{ scaleX: 2 }, { scaleY: 2 }],
-    color: 'blue',
+    color: '#00c5e3',
     fontSize: 20,
   },
   checkedOpVal: {
-    color: 'blue',
+    color: '#00c5e3',
     fontSize: 30,
     paddingLeft: 10,
     paddingRight: 30
