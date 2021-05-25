@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, View, DrawerLayoutAndroid } from 'react-native';
 import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider } from '@ant-design/react-native';
-import { QuickStartAPI } from '@api';
+import { RecordAPI } from '@api';
 const Item = List.Item;
 
 export default class QuickStartDetail extends Component {
@@ -12,7 +12,6 @@ export default class QuickStartDetail extends Component {
       itemIndex: 1,
       itemDetail: null,
       recordDetail: null,
-      statisticsInfo: null,
       filledAnswer: null
     };
   }
@@ -31,12 +30,12 @@ export default class QuickStartDetail extends Component {
   refreshState = (recordDetailStr) => {
     let recordDetail = JSON.parse(recordDetailStr);
     let itemDetail = this.getItemDetail(recordDetail);
-    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, statisticsInfo: recordDetail.statisticsInfo, filledAnswer: itemDetail.filledAnswer });
+    this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, filledAnswer: itemDetail.filledAnswer });
   }
 
   componentDidMount = () => {
     const { refreshState } = this;
-    QuickStartAPI.getRecordDetailById(this.state.recordId, function (args) {
+    RecordAPI.getDetailById(this.state.recordId, function (args) {
       refreshState(args);
     });
   }
@@ -158,16 +157,16 @@ export default class QuickStartDetail extends Component {
             <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
               <Flex direction="row" style={{ paddingTop: 20 }}>
                 <Flex.Item style={{ paddingLeft: 4 }}>
-                  <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.total}</Text>
+                  <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.recordDetail == null ? 0 : this.state.recordDetail.itemAmount}</Text>
                 </Flex.Item>
                 <Flex.Item style={{ paddingLeft: 15 }}>
-                  <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.rightCount}</Text>
+                  <Text style={{ color: '#00ce00', fontSize: 15, fontWeight: 'bold' }}>答对：{this.state.recordDetail == null ? 0 : this.state.recordDetail.rightCount}</Text>
                 </Flex.Item>
                 <Flex.Item style={{ paddingLeft: 4 }}>
-                  <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.wrongCount}</Text>
+                  <Text style={{ color: '#fa2e3e', fontSize: 15, fontWeight: 'bold' }}>答错：{this.state.recordDetail == null ? 0 : this.state.recordDetail.wrongCount}</Text>
                 </Flex.Item>
                 <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                  <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.statisticsInfo == null ? 0 : this.state.statisticsInfo.undoCount}</Text>
+                  <Text style={{ color: '#9f9898', fontSize: 15, fontWeight: 'bold' }}>未开始：{this.state.recordDetail == null ? 0 : this.state.recordDetail.itemAmount - this.state.recordDetail.rightCount - this.state.recordDetail.wrongCount}</Text>
                 </Flex.Item>
               </Flex>
 

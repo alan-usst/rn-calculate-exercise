@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, Text, StyleSheet, TextInput } from 'react-native';
 import { Button, Toast, Flex, WingBlank, Checkbox, Icon, PickerView } from '@ant-design/react-native';
 import a from '@ant-design/react-native/lib/modal/operation';
-import {QuickStartAPI} from '@api';
-
-const CheckboxItem = Checkbox.CheckboxItem;
+import { RecordAPI } from '@api';
 
 export default class QuickStart extends Component {
 
@@ -46,7 +44,7 @@ export default class QuickStart extends Component {
 
     
     const {navigation} = this.props;
-    QuickStartAPI.addRecord(ops, maxNum, itemAmount, function (args) {
+    RecordAPI.add(ops, maxNum, itemAmount, function (args) {
       console.log("rn java call back, 新增的记录id", args)
       // 回调方法中调用组件的props 得到的都是null
       // this.props.navigation.navigate('qs_detail');

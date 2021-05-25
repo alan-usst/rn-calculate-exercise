@@ -11,6 +11,9 @@ import com.myapp.domain.Item;
 import com.myapp.domain.OP;
 import com.myapp.domain.Record;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecordRepository {
 
     public static Record add(Record record) {
@@ -40,7 +43,7 @@ public class RecordRepository {
     public static void submitSingleItem(Record record) {
         SQLiteDatabase db = MainActivity.getDatabase();
         ContentValues values = new ContentValues();
-        Record.StatisticsInfo statisticsInfo = record.getStatisticsInfo();
+        Record.StatisticsInfo statisticsInfo = record.calculateStatisticsInfo();
         values.put(DBRecordConstant.COLUMN_RIGHT_COUNT, statisticsInfo.getRightCount());
         values.put(DBRecordConstant.COLUMN_WRONG_COUNT, statisticsInfo.getWrongCount());
         values.put(DBRecordConstant.COLUMN_ITEMS, JSON.toJSONString(record.getItems()));
@@ -50,6 +53,7 @@ public class RecordRepository {
 
     /**
      * 根据id获取record
+     *
      * @param recordId
      * @return
      */
@@ -65,6 +69,8 @@ public class RecordRepository {
             String createTime = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_CREATE_TIME));
             String ops = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_OPS));
             int itemAmount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_ITEM_AMOUNT));
+            int rightCount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_RIGHT_COUNT));
+            int wrongCount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_WRONG_COUNT));
             int maxNum = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_MAX_NUM));
             String items = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_ITEMS));
 
@@ -72,10 +78,54 @@ public class RecordRepository {
             res.setCreateTime(createTime);
             res.setOps(JSON.parseArray(ops, OP.class));
             res.setItemAmount(itemAmount);
+            res.setRightCount(rightCount);
+            res.setWrongCount(wrongCount);
             res.setMaxNum(maxNum);
             res.setItems(JSON.parseArray(items, Item.class));
         } else {
             res = null;
+        }
+        cursor.close();
+        db.close();
+        return res;
+    }
+
+    public static List<Record> getOverviewList(int pageIndex, int pageSize) {
+        SQLiteDatabase db = MainActivity.getDatabase();
+        Cursor cursor = db.query(DBRecordConstant.TABLE_NAME,
+                new String[]{DBRecordConstant.COLUMN_ID, DBRecordConstant.COLUMN_CREATE_TIME,
+                        DBRecordConstant.COLUMN_OPS, DBRecordConstant.COLUMN_ITEM_AMOUNT,
+                        DBRecordConstant.COLUMN_RIGHT_COUNT, DBRecordConstant.COLUMN_WRONG_COUNT,
+                        DBRecordConstant.COLUMN_MAX_NUM},
+                null, null, null, null, String.format("%s desc", DBRecordConstant.COLUMN_CREATE_TIME),
+                String.format("%s,%s", (pageIndex - 1) * pageSize, pageSize)
+        );
+        List<Record> res = new ArrayList<>();
+
+        if (cursor.getCount() > 0) {
+            //移动到首位
+            cursor.moveToFirst();
+            for (int i = 0; i < cursor.getCount(); i++) {
+                long id = cursor.getLong(cursor.getColumnIndex(DBRecordConstant.COLUMN_ID));
+                String createTime = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_CREATE_TIME));
+                String ops = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_OPS));
+                int itemAmount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_ITEM_AMOUNT));
+                int rightCount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_RIGHT_COUNT));
+                int wrongCount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_WRONG_COUNT));
+                int maxNum = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_MAX_NUM));
+
+                Record record = new Record();
+                record.setId(id);
+                record.setCreateTime(createTime);
+                record.setOps(JSON.parseArray(ops, OP.class));
+                record.setItemAmount(itemAmount);
+                record.setRightCount(rightCount);
+                record.setWrongCount(wrongCount);
+                record.setMaxNum(maxNum);
+                res.add(record);
+                //移动到首位
+                cursor.moveToNext();
+            }
         }
         cursor.close();
         db.close();

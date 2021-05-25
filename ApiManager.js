@@ -1,5 +1,5 @@
 const { NativeModules } = require('react-native');
-const QuickStartAPI = NativeModules.QuickStartAPI;
+const RecordAPI = NativeModules.RecordAPI;
 
 
-export {QuickStartAPI}
+export {RecordAPI}

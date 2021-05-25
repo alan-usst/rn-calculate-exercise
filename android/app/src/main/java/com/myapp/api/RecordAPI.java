@@ -20,9 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class QuickStartAPI extends ReactContextBaseJavaModule {
+public class RecordAPI extends ReactContextBaseJavaModule {
 
-    public QuickStartAPI(final ReactApplicationContext reactContext) {
+    public RecordAPI(final ReactApplicationContext reactContext) {
         super(reactContext);
     }
 
@@ -30,18 +30,19 @@ public class QuickStartAPI extends ReactContextBaseJavaModule {
     @NotNull
     @Override
     public String getName() {
-        return "QuickStartAPI";
+        return "RecordAPI";
     }
 
     /**
      * 新增record
+     *
      * @param opArray
      * @param maxNum
      * @param itemAmount
      * @param callback
      */
     @ReactMethod
-    public static void addRecord(ReadableArray opArray, int maxNum, int itemAmount, Callback callback) {
+    public static void add(ReadableArray opArray, int maxNum, int itemAmount, Callback callback) {
 
         List<OP> ops = OP.getByStrings(opArray.toArrayList());
         // 创建记录
@@ -52,12 +53,21 @@ public class QuickStartAPI extends ReactContextBaseJavaModule {
 
     /**
      * 根据id获取record详情
+     *
      * @param recordId
      * @param callback
      */
     @ReactMethod
-    public static void getRecordDetailById(int recordId, Callback callback) {
-        Record record = RecordRepository.getById((long)recordId);
+    public static void getDetailById(int recordId, Callback callback) {
+        Record record = RecordRepository.getById((long) recordId);
         callback.invoke(JSON.toJSONString(record));
+    }
+
+    @ReactMethod
+    public static void getOverviewList(int pageIndex, int pageSize, Callback callback) {
+        List<Record> records = RecordRepository.getOverviewList(pageIndex, pageSize);
+        System.out.println("getOverviewList");
+        System.out.println("records size:" + records.size());
+        callback.invoke(JSON.toJSONString(records));
     }
 }

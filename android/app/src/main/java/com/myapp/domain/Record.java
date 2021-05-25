@@ -16,15 +16,21 @@ public class Record {
 
     private Integer itemAmount;
 
+    private Integer rightCount;
+
+    private Integer wrongCount;
+
     private Integer maxNum;
 
     private List<Item> items;
 
-    public Record(Long id, String createTime, List<OP> ops, Integer itemAmount, Integer maxNum, List<Item> items) {
+    public Record(Long id, String createTime, List<OP> ops, Integer itemAmount, Integer rightCount, Integer wrongCount, Integer maxNum, List<Item> items) {
         this.id = id;
         this.createTime = createTime;
         this.ops = ops;
         this.itemAmount = itemAmount;
+        this.rightCount = rightCount;
+        this.wrongCount = wrongCount;
         this.maxNum = maxNum;
         this.items = items;
     }
@@ -36,7 +42,7 @@ public class Record {
      * 获取统计信息
      * @return
      */
-    public StatisticsInfo getStatisticsInfo(){
+    public StatisticsInfo calculateStatisticsInfo(){
         if(items ==null|| items.isEmpty()){
             return new StatisticsInfo(0,0,0,0);
         }
@@ -45,7 +51,6 @@ public class Record {
         res.setRightCount((int) items.stream().filter(item-> Item.Status.RIGHT.equals(item.getStatus())).count());
         res.setWrongCount((int) items.stream().filter(item-> Item.Status.WRONG.equals(item.getStatus())).count());
         res.setUndoCount((int) items.stream().filter(item-> Item.Status.UNDO.equals(item.getStatus())).count());
-
         return res;
     }
 
@@ -144,5 +149,21 @@ public class Record {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    public void setRightCount(Integer rightCount) {
+        this.rightCount = rightCount;
+    }
+
+    public void setWrongCount(Integer wrongCount) {
+        this.wrongCount = wrongCount;
+    }
+
+    public Integer getRightCount() {
+        return rightCount;
+    }
+
+    public Integer getWrongCount() {
+        return wrongCount;
     }
 }

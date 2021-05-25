@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { AppRegistry, Text, View } from 'react-native';
 import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design/react-native';
 
+import { RecordAPI } from '@api';
+
 const Item = List.Item;
 
 export default class RecordList extends Component {
@@ -11,7 +13,6 @@ export default class RecordList extends Component {
             layout: 'grid',
         };
     }
-
     sleep = (time) =>
         new Promise(resolve => setTimeout(() => resolve(), time));
     onFetch = async (
@@ -21,21 +22,13 @@ export default class RecordList extends Component {
     ) => {
         try {
             let pageLimit = 10;
-            const skip = (page - 1) * pageLimit;
-            //Generate dummy data
-            let rowData = Array.from(
-                { length: pageLimit },
-                (_, index) => `item -> ${index + skip}`
-            );
-
-            //Simulate the end of the list if there is no more data returned from the server
-            if (page === 3) {
-                rowData = [];
-            }
-
-            //Simulate the network loading in ES7 syntax (async/await)
-            await this.sleep(2000);
-            startFetch(rowData, pageLimit);
+            RecordAPI.getOverviewList(page, pageLimit, function (args) {
+                console.log("pageIndex", page)
+                console.log("pageLimit", pageLimit)
+                console.log("rowData", rowData)
+                let rowData = JSON.parse(args);
+                startFetch(rowData, pageLimit);
+              });            
         } catch (err) {
             abortFetch(); //manually stop the refresh or pagination if it encounters network error
         }
@@ -43,8 +36,8 @@ export default class RecordList extends Component {
 
     renderItem = (item) => {
         return (
-            <Item style={{ padding: 10 }}>
-                <Text>{item}</Text>
+            <Item key={item.id} style={{ padding: 10 }}>
+                <Text>{item.maxNum}</Text>
             </Item>
         );
     };
