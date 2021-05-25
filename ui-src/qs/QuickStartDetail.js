@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView, Text, View, DrawerLayoutAndroid } from 'react-native';
 import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider } from '@ant-design/react-native';
 import { RecordAPI } from '@api';
+import { getOpStr } from '@util';
 const Item = List.Item;
 
 export default class QuickStartDetail extends Component {
@@ -40,18 +41,18 @@ export default class QuickStartDetail extends Component {
     });
   }
 
-  getOpStr = (opEnum) => {
-    if (opEnum == "ADD") {
-      return "+";
-    } else if (opEnum == "SUB") {
-      return "-";
-    } else if (opEnum == "MUL") {
-      return "×";
-    } else if (opEnum == "DIV") {
-      return "÷";
-    }
-    return "";
-  }
+  // getOpStr = (opEnum) => {
+  //   if (opEnum == "ADD") {
+  //     return "+";
+  //   } else if (opEnum == "SUB") {
+  //     return "-";
+  //   } else if (opEnum == "MUL") {
+  //     return "×";
+  //   } else if (opEnum == "DIV") {
+  //     return "÷";
+  //   }
+  //   return "";
+  // }
 
   // 变更题目
   changeItem = (itemIndex) => {
@@ -66,7 +67,7 @@ export default class QuickStartDetail extends Component {
     return (
       <Item key={item.index} onPress={() => this.changeItem(item.index)}>
         <View style={{ flexDirection: 'row', color: statusColor }}>
-          <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {this.getOpStr(item.op)} {item.n2}</Text>
+          <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {getOpStr(item.op)} {item.n2}</Text>
         </View>
       </Item>
     );
@@ -187,7 +188,7 @@ export default class QuickStartDetail extends Component {
               </Flex>
               {/*公式栏*/}
               <View style={{ paddingTop: 50, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${this.getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
+                <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
               </View>
 
               <View style={{ paddingTop: 30, justifyContent: 'center', flexDirection:'row'}}>

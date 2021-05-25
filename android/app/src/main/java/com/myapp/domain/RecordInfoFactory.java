@@ -24,7 +24,6 @@ public class RecordInfoFactory {
         res.setMaxNum(param.getMaxNum());
         res.setItemAmount(items.size());
         res.setItems(items);
-
         return res;
 
     }

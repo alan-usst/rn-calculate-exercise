@@ -116,7 +116,7 @@ public class RecordRepository {
 
                 Record record = new Record();
                 record.setId(id);
-                record.setCreateTime(createTime);
+                record.setCreateTime(createTime.split(" ")[0]);
                 record.setOps(JSON.parseArray(ops, OP.class));
                 record.setItemAmount(itemAmount);
                 record.setRightCount(rightCount);

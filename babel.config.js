@@ -8,6 +8,7 @@ module.exports = function (api) {
       {
         alias: {
           '@api': './ApiManager',
+          '@util': './util',
         },
       },
     ],

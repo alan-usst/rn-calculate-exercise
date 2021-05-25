@@ -3,6 +3,7 @@ import { AppRegistry, Text, View } from 'react-native';
 import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design/react-native';
 
 import { RecordAPI } from '@api';
+import { getOpListStr } from '@util';
 
 const Item = List.Item;
 
@@ -25,10 +26,10 @@ export default class RecordList extends Component {
             RecordAPI.getOverviewList(page, pageLimit, function (args) {
                 console.log("pageIndex", page)
                 console.log("pageLimit", pageLimit)
-                console.log("rowData", rowData)
                 let rowData = JSON.parse(args);
+                console.log("rowData", rowData)
                 startFetch(rowData, pageLimit);
-              });            
+            });
         } catch (err) {
             abortFetch(); //manually stop the refresh or pagination if it encounters network error
         }
@@ -37,7 +38,20 @@ export default class RecordList extends Component {
     renderItem = (item) => {
         return (
             <Item key={item.id} style={{ padding: 10 }}>
-                <Text>{item.maxNum}</Text>
+                <Flex justify="between" >
+                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                        <Text style={{ textAlign: 'center' }}>{item.createTime}</Text>
+                    </Flex.Item>
+                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                        <Text style={{ textAlign: 'center' }}>{getOpListStr(item.ops).join("  ")}</Text>
+                    </Flex.Item>
+                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                        <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
+                    </Flex.Item>
+                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                        <Text style={{ textAlign: 'center' }}><Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{item.itemAmount - item.rightCount - item.wrongCount}</Text></Text>
+                    </Flex.Item>
+                </Flex>
             </Item>
         );
     };
@@ -49,16 +63,16 @@ export default class RecordList extends Component {
                 <Item style={{ padding: 10 }}>
                     <Flex justify="between" >
                         <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>创建日期</Text>
+                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>创建日期</Text>
                         </Flex.Item>
                         <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>运算逻辑</Text>
+                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>运算逻辑</Text>
                         </Flex.Item>
                         <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>题量</Text>
+                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>题量</Text>
                         </Flex.Item>
                         <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>完成情况</Text>
+                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>完成情况</Text>
                         </Flex.Item>
                     </Flex>
                 </Item>
