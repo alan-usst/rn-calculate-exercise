@@ -11,7 +11,6 @@ export default class RecordList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            layout: 'grid',
         };
     }
     sleep = (time) =>
@@ -35,9 +34,15 @@ export default class RecordList extends Component {
         }
     };
 
+    go2RecordDetail = (recordId) => {
+        this.props.navigation.navigate('qs_detail', { recordId: recordId });
+    }
+
     renderItem = (item) => {
+
+        let undoCount = item.itemAmount - item.rightCount - item.wrongCount;
         return (
-            <Item key={item.id} style={{ padding: 10 }}>
+            <Item key={item.id} onPress={() => this.go2RecordDetail(item.id)}>
                 <Flex justify="between" >
                     <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
                         <Text style={{ textAlign: 'center' }}>{item.createTime}</Text>
@@ -49,7 +54,7 @@ export default class RecordList extends Component {
                         <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
                     </Flex.Item>
                     <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}><Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{item.itemAmount - item.rightCount - item.wrongCount}</Text></Text>
+                        <Text style={{ textAlign: 'center' }}>{undoCount>0? (<Text><Icon color="#f90" size={12} name="info-circle"/>  </Text>):null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
                     </Flex.Item>
                 </Flex>
             </Item>
@@ -57,35 +62,40 @@ export default class RecordList extends Component {
     };
 
 
+
+
     render() {
+        const title = () => (<Item style={{ padding: 10 }}>
+            <Flex justify="between" >
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>创建日期</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>运算逻辑</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>题量</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>进度</Text>
+                </Flex.Item>
+            </Flex>
+        </Item>);
         return (
-            <Provider>
-                <Item style={{ padding: 10 }}>
-                    <Flex justify="between" >
-                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>创建日期</Text>
-                        </Flex.Item>
-                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>运算逻辑</Text>
-                        </Flex.Item>
-                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>题量</Text>
-                        </Flex.Item>
-                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                            <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>完成情况</Text>
-                        </Flex.Item>
-                    </Flex>
-                </Item>
-                <ListView
-                    onFetch={this.onFetch}
-                    keyExtractor={(item, index) =>
-                        item.id
-                    }
-                    renderItem={this.renderItem}
-                    numColumns={1}
-                >
-                </ListView>
-            </Provider>
+            <ListView
+                legacyImplementation={true}
+                header={title}
+                onFetch={this.onFetch}
+                keyExtractor={(item, index) =>
+                    item.id
+                }
+                allLoadedText={'没有更多数据了'}
+                waitingSpinnerText={'加载中...'}
+                refreshable={true}
+                renderItem={this.renderItem}
+                numColumns={1}
+            >
+            </ListView>
         );
     }
 }

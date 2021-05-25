@@ -57,7 +57,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'recordListTab'}
             onPress={() => this.onChangeTab('recordListTab')}
           >
-            <RecordList/>
+            <RecordList navigation={this.props.navigation}/>
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="area-chart" />}
