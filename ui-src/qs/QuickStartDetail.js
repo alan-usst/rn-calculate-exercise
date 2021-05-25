@@ -158,12 +158,13 @@ export default class QuickStartDetail extends Component {
     }
     return (
       <Provider>
-        <DrawerLayoutAndroid
-          ref={(drawer) => { this.drawer = drawer; }}
+        <Drawer
+          drawerRef={el => (this.drawer = el)}
           drawerWidth={200}
-          drawerPosition={"right"}
+          position={"right"}
           open={false}
-          renderNavigationView={() => this.genItemList()}>
+          sidebar={this.genItemList()}
+          >
           <ScrollView
             // style={{ flex: 1 }}
             automaticallyAdjustContentInsets={false}
@@ -227,7 +228,7 @@ export default class QuickStartDetail extends Component {
               }
             }}
           />
-        </DrawerLayoutAndroid>
+        </Drawer>
       </Provider>
     )
   }
