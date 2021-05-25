@@ -60,7 +60,7 @@ public class Item {
     }
 
     public void judge(){
-        if(this.filledAnswer==this.rightAnswer){
+        if(this.rightAnswer.equals(this.filledAnswer)){
             this.status = Status.RIGHT;
         }else{
             this.status = Status.WRONG;

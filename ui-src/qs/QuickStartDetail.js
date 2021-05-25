@@ -103,15 +103,16 @@ export default class QuickStartDetail extends Component {
     const { filledAnswer, itemDetail } = this.state;
     const {refreshState} = this;
     if(itemDetail.status == "RIGHT"){
-      Toast.info("当前题目已经回答正确，请勿重复解答");
+      Toast.info("当前题目已经回答正确，请勿重复解答",1);
       return;
     }
     if (num == "delete") {
+      itemDetail.status = "UNDO";
       if (filledAnswer != null) {
         if (filledAnswer < 10) {
-          this.setState({ filledAnswer: null });
+          this.setState({ filledAnswer: null,itemDetail:itemDetail});
         } else {
-          this.setState({ filledAnswer: Math.round(filledAnswer/10)  });
+          this.setState({ filledAnswer: Math.round(filledAnswer/10),itemDetail:itemDetail});
         }
       }
     } else if (num == "confirm") {
@@ -166,7 +167,7 @@ export default class QuickStartDetail extends Component {
             automaticallyAdjustContentInsets={false}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
-            <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
+            <WingBlank style={{ marginBottom: 0, marginTop: 5 }}>
               <Flex direction="row" style={{ paddingTop: 20 }}>
                 <Flex.Item style={{ paddingLeft: 4 }}>
                   <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.recordDetail == null ? 0 : this.state.recordDetail.itemAmount}</Text>
@@ -212,7 +213,7 @@ export default class QuickStartDetail extends Component {
             data={[{ text: '1' }, { text: '2' }, { text: '3' }, { text: '4' }, { text: '5' }, { text: '6' }, { text: '7' }, { text: '8' }, { text: '9' }, { icon: 'double-left' }, { text: '0' }, { icon: 'check' }]}
             columnNum={3}
             onPress={(_el, index) => this.numInput(getNumByIndex(index))}
-            itemStyle={{ height: 100, borderColor: '#a9a6b2' }}
+            itemStyle={{ height: 70, borderColor: '#a9a6b2' }}
             renderItem={(el, index) => {
               let num = getNumByIndex(index);
               if (num == "delete") {
