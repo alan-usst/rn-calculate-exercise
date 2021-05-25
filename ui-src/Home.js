@@ -17,14 +17,14 @@ export default class Home extends Component {
     };
   }
 
-  setUnCompleteCount = (count)=>{
+  setUnCompleteCountState = (count)=>{
     this.setState({ unCompleteCount: count })
   }
 
   refreshUnCompleteCount = ()=>{
-    const {setUnCompleteCount} = this;
+    const {setUnCompleteCountState} = this;
     RecordAPI.getUnCompleteRecordCount(function (args) {
-      setUnCompleteCount(args);
+      setUnCompleteCountState(args);
     });
     
   }
@@ -49,10 +49,6 @@ export default class Home extends Component {
   // 展示tabBar
   showTabBar = () => {
     this.setState({ tabBarVisiable: true });
-  }
-
-  go2detail = () => {
-    console.log("go2detail");
   }
 
   render() {

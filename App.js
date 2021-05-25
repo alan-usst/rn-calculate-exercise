@@ -18,11 +18,14 @@ export default class App extends Component {
           <Stack.Screen
             name="home"
             options={{ title: null }}
-            component={Home} />
+          >
+            {props => <Home {...props} ref={(e) => this.Home_Screen = e} />}
+          </Stack.Screen>
           <Stack.Screen
             name="qs_detail"
-            options={{ title: null }}
-            component={QuickStartDetail} />
+            options={{ title: null }}>
+            {props => <QuickStartDetail {...props} Home_Screen={this.Home_Screen} />}
+          </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     );

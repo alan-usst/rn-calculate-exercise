@@ -103,6 +103,8 @@ export default class QuickStartDetail extends Component {
   numInput = (num) => {
     const { filledAnswer, itemDetail } = this.state;
     const {refreshState} = this;
+    console.log("this.props", this.props);
+    const refreshUnCompleteCount = this.props.Home_Screen.refreshUnCompleteCount;
     if(itemDetail.status == "RIGHT"){
       Toast.info("当前题目已经回答正确，请勿重复解答",1);
       return;
@@ -126,8 +128,8 @@ export default class QuickStartDetail extends Component {
       });
       RecordAPI.submitSingleItem(recordId, itemIndex, JSON.stringify(items),function (args) {
         refreshState(args);
+        refreshUnCompleteCount();
       });
-      console.log("confirm", filledAnswer);
     } else {
       if (filledAnswer == null) {
         this.setState({ filledAnswer: num });
