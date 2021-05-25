@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { AppRegistry, Text, View } from 'react-native';
-import { Button, Provider, Toast, Icon, SearchBar, ListView, List } from '@ant-design/react-native';
+import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design/react-native';
 
 const Item = List.Item;
 
@@ -21,9 +21,7 @@ export default class RecordList extends Component {
     ) => {
         try {
             let pageLimit = 10;
-            if (this.state.layout === 'grid') pageLimit = 60;
             const skip = (page - 1) * pageLimit;
-
             //Generate dummy data
             let rowData = Array.from(
                 { length: pageLimit },
@@ -51,9 +49,26 @@ export default class RecordList extends Component {
         );
     };
 
+
     render() {
         return (
             <Provider>
+                <Item style={{ padding: 10 }}>
+                    <Flex justify="between" >
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>创建日期</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>运算逻辑</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>题量</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{fontSize: 17, fontWeight: 'bold'}}>完成情况</Text>
+                        </Flex.Item>
+                    </Flex>
+                </Item>
                 <ListView
                     onFetch={this.onFetch}
                     keyExtractor={(item, index) =>
@@ -61,7 +76,8 @@ export default class RecordList extends Component {
                     }
                     renderItem={this.renderItem}
                     numColumns={1}
-                />
+                >
+                </ListView>
             </Provider>
         );
     }
