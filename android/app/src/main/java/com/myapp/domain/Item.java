@@ -59,6 +59,14 @@ public class Item {
         return sb.toString();
     }
 
+    public void judge(){
+        if(this.filledAnswer==this.rightAnswer){
+            this.status = Status.RIGHT;
+        }else{
+            this.status = Status.WRONG;
+        }
+    }
+
     /**
      * 生成新对象，并计算期望值
      * @param n1

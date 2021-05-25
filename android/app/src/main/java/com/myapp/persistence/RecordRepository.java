@@ -40,7 +40,7 @@ public class RecordRepository {
      *
      * @param record
      */
-    public static void submitSingleItem(Record record) {
+    public static Record submitSingleItem(Record record) {
         SQLiteDatabase db = MainActivity.getDatabase();
         ContentValues values = new ContentValues();
         Record.StatisticsInfo statisticsInfo = record.calculateStatisticsInfo();
@@ -49,6 +49,7 @@ public class RecordRepository {
         values.put(DBRecordConstant.COLUMN_ITEMS, JSON.toJSONString(record.getItems()));
         db.update(DBRecordConstant.TABLE_NAME, values, String.format("%s = ?", DBRecordConstant.COLUMN_ID), new String[]{record.getId().toString()});
         db.close();
+        return getById(record.getId());
     }
 
     /**

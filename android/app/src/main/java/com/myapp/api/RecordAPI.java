@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.myapp.domain.Item;
 import com.myapp.domain.OP;
 import com.myapp.domain.Record;
 import com.myapp.domain.RecordInfoFactory;
@@ -66,8 +67,26 @@ public class RecordAPI extends ReactContextBaseJavaModule {
     @ReactMethod
     public static void getOverviewList(int pageIndex, int pageSize, Callback callback) {
         List<Record> records = RecordRepository.getOverviewList(pageIndex, pageSize);
-        System.out.println("getOverviewList");
-        System.out.println("records size:" + records.size());
         callback.invoke(JSON.toJSONString(records));
+    }
+
+    /**
+     * 提交单个题目
+     * @param recordId
+     * @param items
+     * @param itemIndex
+     * @param callback
+     */
+    @ReactMethod
+    public static void submitSingleItem(int recordId, int itemIndex,String items, Callback callback) {
+        Record record = new Record();
+        record.setId((long)recordId);
+        record.setItems(JSON.parseArray(items, Item.class));
+        // 需要计算下指定itemId的状态
+        Item item = record.getItems().stream().filter(e->e.getIndex() == itemIndex).findFirst().orElse(new Item());
+        item.judge();
+        // 提交数据库
+        Record newRecord = RecordRepository.submitSingleItem(record);
+        callback.invoke(JSON.toJSONString(newRecord));
     }
 }

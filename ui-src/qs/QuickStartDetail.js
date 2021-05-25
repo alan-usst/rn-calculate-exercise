@@ -101,6 +101,7 @@ export default class QuickStartDetail extends Component {
   // 键盘输入回调
   numInput = (num) => {
     const { filledAnswer, itemDetail } = this.state;
+    const {refreshState} = this;
     if(itemDetail.status == "RIGHT"){
       Toast.info("当前题目已经回答正确，请勿重复解答");
       return;
@@ -114,6 +115,16 @@ export default class QuickStartDetail extends Component {
         }
       }
     } else if (num == "confirm") {
+      const {recordId, itemIndex, recordDetail,filledAnswer} = this.state;
+      let items = recordDetail.items;
+      items.forEach(ele => {
+        if(ele.index == itemIndex){
+          ele["filledAnswer"] = filledAnswer;
+        }
+      });
+      RecordAPI.submitSingleItem(recordId, itemIndex, JSON.stringify(items),function (args) {
+        refreshState(args);
+      });
       console.log("confirm", filledAnswer);
     } else {
       if (filledAnswer == null) {
