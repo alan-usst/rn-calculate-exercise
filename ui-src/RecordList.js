@@ -54,7 +54,7 @@ export default class RecordList extends Component {
                         <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
                     </Flex.Item>
                     <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{undoCount>0? (<Text><Icon color="#f90" size={12} name="info-circle"/>  </Text>):null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
+                        <Text style={{ textAlign: 'center' }}>{item.rightCount>=item.itemAmount? (<Text><Icon color="#f90" size={12} name="info-circle"/>  </Text>):null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
                     </Flex.Item>
                 </Flex>
             </Item>
@@ -83,7 +83,7 @@ export default class RecordList extends Component {
         </Item>);
         return (
             <ListView
-                legacyImplementation={true}
+                // legacyImplementation={true}
                 header={title}
                 onFetch={this.onFetch}
                 keyExtractor={(item, index) =>
@@ -91,7 +91,7 @@ export default class RecordList extends Component {
                 }
                 allLoadedText={'没有更多数据了'}
                 waitingSpinnerText={'加载中...'}
-                refreshable={true}
+                // refreshable={true}
                 renderItem={this.renderItem}
                 numColumns={1}
             >

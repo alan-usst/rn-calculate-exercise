@@ -132,4 +132,12 @@ public class RecordRepository {
         db.close();
         return res;
     }
+
+    public static long getUnCompleteRecordCount(){
+        List<Record> records = getOverviewList(1,Integer.MAX_VALUE);
+        if(records.isEmpty()){
+            return 0;
+        }
+        return records.stream().filter(record->!record.getItemAmount().equals(record.getRightCount())).count();
+    }
 }

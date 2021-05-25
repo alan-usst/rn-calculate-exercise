@@ -89,4 +89,10 @@ public class RecordAPI extends ReactContextBaseJavaModule {
         Record newRecord = RecordRepository.submitSingleItem(record);
         callback.invoke(JSON.toJSONString(newRecord));
     }
+
+    @ReactMethod
+    public static void getUnCompleteRecordCount(Callback callback) {
+        long count = RecordRepository.getUnCompleteRecordCount();
+        callback.invoke(Integer.valueOf(String.valueOf(count)));
+    }
 }
