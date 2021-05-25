@@ -13,8 +13,6 @@ export default class RecordList extends Component {
         this.state = {
         };
     }
-    sleep = (time) =>
-        new Promise(resolve => setTimeout(() => resolve(), time));
     onFetch = async (
         page = 1,
         startFetch,
@@ -54,7 +52,7 @@ export default class RecordList extends Component {
                         <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
                     </Flex.Item>
                     <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{item.rightCount<item.itemAmount? (<Text><Icon color="#f90" size={12} name="info-circle"/>  </Text>):null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
+                        <Text style={{ textAlign: 'center' }}>{item.rightCount < item.itemAmount ? (<Text><Icon color="#f90" size={12} name="info-circle" />  </Text>) : null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
                     </Flex.Item>
                 </Flex>
             </Item>

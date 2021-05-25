@@ -17,15 +17,20 @@ export default class Home extends Component {
     };
   }
 
-  refreshUnCompleteCount = (count)=>{
+  setUnCompleteCount = (count)=>{
     this.setState({ unCompleteCount: count })
   }
 
-  componentDidMount = () => {
-    const {refreshUnCompleteCount} = this;
+  refreshUnCompleteCount = ()=>{
+    const {setUnCompleteCount} = this;
     RecordAPI.getUnCompleteRecordCount(function (args) {
-      refreshUnCompleteCount(args);
+      setUnCompleteCount(args);
     });
+    
+  }
+
+  componentDidMount = () => {
+    this.refreshUnCompleteCount();
   }
 
   renderContent(pageText) {
