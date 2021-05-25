@@ -20,6 +20,7 @@ public class RecordInfoFactory {
         Record res = new Record();
         List<Item> items = genItems(param);
         res.setCreateTime(TimeUtil.getNowStr());
+        res.setOps(param.getOps());
         res.setMaxNum(param.getMaxNum());
         res.setItemAmount(items.size());
         res.setItems(items);

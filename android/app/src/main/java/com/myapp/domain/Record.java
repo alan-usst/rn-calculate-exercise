@@ -12,15 +12,18 @@ public class Record {
 
     private String createTime;
 
+    private List<OP> ops;
+
     private Integer itemAmount;
 
     private Integer maxNum;
 
     private List<Item> items;
 
-    public Record(Long id, String createTime, Integer itemAmount, Integer maxNum, List<Item> items) {
+    public Record(Long id, String createTime, List<OP> ops, Integer itemAmount, Integer maxNum, List<Item> items) {
         this.id = id;
         this.createTime = createTime;
+        this.ops = ops;
         this.itemAmount = itemAmount;
         this.maxNum = maxNum;
         this.items = items;
@@ -107,6 +110,10 @@ public class Record {
         return itemAmount;
     }
 
+    public List<OP> getOps() {
+        return ops;
+    }
+
     public Integer getMaxNum() {
         return maxNum;
     }
@@ -121,6 +128,10 @@ public class Record {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public void setOps(List<OP> ops) {
+        this.ops = ops;
     }
 
     public void setItemAmount(Integer itemAmount) {

@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.myapp.MainActivity;
 import com.myapp.common.DBRecordConstant;
 import com.myapp.domain.Item;
+import com.myapp.domain.OP;
 import com.myapp.domain.Record;
 
 public class RecordRepository {
@@ -15,9 +16,9 @@ public class RecordRepository {
     public static Record add(Record record) {
         SQLiteDatabase db = MainActivity.getDatabase();
         ContentValues values = new ContentValues();
-        Record.StatisticsInfo statisticsInfo = record.getStatisticsInfo();
         values.put(DBRecordConstant.COLUMN_CREATE_TIME, record.getCreateTime());
         values.put(DBRecordConstant.COLUMN_ITEM_AMOUNT, record.getItemAmount());
+        values.put(DBRecordConstant.COLUMN_OPS, JSON.toJSONString(record.getOps()));
         values.put(DBRecordConstant.COLUMN_MAX_NUM, record.getMaxNum());
         values.put(DBRecordConstant.COLUMN_RIGHT_COUNT, 0);
         values.put(DBRecordConstant.COLUMN_WRONG_COUNT, 0);
@@ -62,12 +63,14 @@ public class RecordRepository {
             cursor.moveToFirst();
             long id = cursor.getLong(cursor.getColumnIndex(DBRecordConstant.COLUMN_ID));
             String createTime = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_CREATE_TIME));
+            String ops = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_OPS));
             int itemAmount = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_ITEM_AMOUNT));
             int maxNum = cursor.getInt(cursor.getColumnIndex(DBRecordConstant.COLUMN_MAX_NUM));
             String items = cursor.getString(cursor.getColumnIndex(DBRecordConstant.COLUMN_ITEMS));
 
             res.setId(id);
             res.setCreateTime(createTime);
+            res.setOps(JSON.parseArray(ops, OP.class));
             res.setItemAmount(itemAmount);
             res.setMaxNum(maxNum);
             res.setItems(JSON.parseArray(items, Item.class));

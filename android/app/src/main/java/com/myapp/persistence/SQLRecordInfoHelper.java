@@ -11,6 +11,7 @@ public class SQLRecordInfoHelper  extends SQLiteOpenHelper {
     public static final String CREATE_RECORD_INFO = "create table record ( "
             + String.format("%s integer primary key autoincrement,", DBRecordConstant.COLUMN_ID)
             + String.format("%s text,", DBRecordConstant.COLUMN_CREATE_TIME)
+            + String.format("%s text,", DBRecordConstant.COLUMN_OPS)
             + String.format("%s integer,", DBRecordConstant.COLUMN_MAX_NUM)
             + String.format("%s integer,", DBRecordConstant.COLUMN_ITEM_AMOUNT)
             + String.format("%s integer,", DBRecordConstant.COLUMN_RIGHT_COUNT)

@@ -27,7 +27,7 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         context = this;
         // 初始化数据库
-        helper = new SQLRecordInfoHelper(this, "FourOperations.db", null, 2);
+        helper = new SQLRecordInfoHelper(this, "FourOperations.db", null, 3);
         //检测到没有FourOperations这个数据库，会创建该数据库并调用MyDatabaseHelper中的onCreated方法。
         helper.getWritableDatabase();
 

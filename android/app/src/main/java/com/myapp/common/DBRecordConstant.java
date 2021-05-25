@@ -8,6 +8,8 @@ public class DBRecordConstant {
 
     public static final String COLUMN_CREATE_TIME = "createTime";
 
+    public static final String COLUMN_OPS = "ops";
+
     public static final String COLUMN_MAX_NUM = "maxNum";
 
     public static final String COLUMN_ITEM_AMOUNT = "itemAmount";
