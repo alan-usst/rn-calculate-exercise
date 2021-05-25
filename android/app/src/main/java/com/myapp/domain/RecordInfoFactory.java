@@ -34,7 +34,6 @@ public class RecordInfoFactory {
      */
     private static List<Item> genItems(CreateRecordParam param){
         int count = 1;
-        int index = 1;
         Set<Item> items = new HashSet<>();
         while(count<=param.getItemAmount()){
             count++;
@@ -46,11 +45,15 @@ public class RecordInfoFactory {
                 item = genRandomItem(param);
             }
             if(item!=null){
-                item.setIndex(index++);
                 items.add(item);
             }
         }
-        return items.stream().sorted(Comparator.comparingInt(Item::getIndex)).collect(Collectors.toList());
+        int index = 1;
+        List<Item> itemList = items.stream().filter(Item::ifDivValid).collect(Collectors.toList());
+        for(Item item: itemList){
+            item.setIndex(index++);
+        }
+        return itemList.stream().sorted(Comparator.comparingInt(Item::getIndex)).collect(Collectors.toList());
     }
 
     /**

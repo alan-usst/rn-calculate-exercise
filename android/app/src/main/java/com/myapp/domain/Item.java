@@ -67,6 +67,16 @@ public class Item {
         }
     }
 
+    public boolean ifDivValid(){
+        if(!OP.DIV.equals(this.op)){
+            return true;
+        }
+        if(this.n1.equals(this.n2) || this.n2.equals(1)){
+            return false;
+        }
+        return true;
+    }
+
     /**
      * 生成新对象，并计算期望值
      * @param n1

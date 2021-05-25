@@ -5,6 +5,7 @@ import { Button, Provider, Toast, Icon, SearchBar, Badge, TabBar } from '@ant-de
 import QuickStart from './qs/QuickStart';
 import RecordList from './RecordList';
 import RecordStatistics from './RecordStatistics';
+import {Info} from './index';
 import { RecordAPI } from '@api';
 
 export default class Home extends Component {
@@ -84,6 +85,14 @@ export default class Home extends Component {
             onPress={() => this.onChangeTab('exerciseStatisticsTab')}
           >
             <RecordStatistics />
+          </TabBar.Item>
+          <TabBar.Item
+            icon={<Icon name="notification" />}
+            title="注意事项"
+            selected={this.state.selectedTab === 'infoTab'}
+            onPress={() => this.onChangeTab('infoTab')}
+          >
+            <Info/>
           </TabBar.Item>
         </TabBar>
       </Provider>

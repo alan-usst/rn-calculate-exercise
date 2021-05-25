@@ -30,6 +30,7 @@ export default class QuickStartDetail extends Component {
 
   refreshState = (recordDetailStr) => {
     let recordDetail = JSON.parse(recordDetailStr);
+    console.log("recordDetail", recordDetail);
     let itemDetail = this.getItemDetail(recordDetail);
     this.setState({ itemDetail: itemDetail, recordDetail, recordDetail, filledAnswer: itemDetail.filledAnswer });
   }
@@ -41,19 +42,6 @@ export default class QuickStartDetail extends Component {
     });
     this.props.Home_Screen.refreshUnCompleteCount();
   }
-
-  // getOpStr = (opEnum) => {
-  //   if (opEnum == "ADD") {
-  //     return "+";
-  //   } else if (opEnum == "SUB") {
-  //     return "-";
-  //   } else if (opEnum == "MUL") {
-  //     return "×";
-  //   } else if (opEnum == "DIV") {
-  //     return "÷";
-  //   }
-  //   return "";
-  // }
 
   // 变更题目
   changeItem = (itemIndex) => {
@@ -104,7 +92,6 @@ export default class QuickStartDetail extends Component {
   numInput = (num) => {
     const { filledAnswer, itemDetail } = this.state;
     const {refreshState} = this;
-    console.log("this.props", this.props);
     const refreshUnCompleteCount = this.props.Home_Screen.refreshUnCompleteCount;
     if(itemDetail.status == "RIGHT"){
       Toast.info("当前题目已经回答正确，请勿重复解答",1);

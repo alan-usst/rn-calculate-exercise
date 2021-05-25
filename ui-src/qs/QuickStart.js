@@ -38,16 +38,8 @@ export default class QuickStart extends Component {
       Toast.fail('至少选择一种运算符', 1)
       return;
     }
-    console.log("ops", ops);
-    console.log("maxNum", maxNum);
-    console.log("itemAmount", itemAmount);
-
-    
     const {navigation} = this.props;
     RecordAPI.add(ops, maxNum, itemAmount, function (args) {
-      console.log("rn java call back, 新增的记录id", args)
-      // 回调方法中调用组件的props 得到的都是null
-      // this.props.navigation.navigate('qs_detail');
       navigation.navigate('qs_detail', {recordId: args});
     });
 
@@ -55,10 +47,6 @@ export default class QuickStart extends Component {
 
   render() {
     return (
-      // <Button onPress={() => Toast.info('This is a toast tips')}>
-      //           QuickStart
-      //         </Button>
-
       <ScrollView
         style={{ flex: 1 }}
         automaticallyAdjustContentInsets={false}
