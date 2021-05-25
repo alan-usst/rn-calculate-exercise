@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ScrollView, Text, View, DrawerLayoutAndroid } from 'react-native';
-import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider } from '@ant-design/react-native';
+import { Button, Grid, Flex, WingBlank, List, Toast, Icon, Provider, Drawer } from '@ant-design/react-native';
 import { RecordAPI } from '@api';
 import { getOpStr } from '@util';
 const Item = List.Item;
@@ -80,6 +80,7 @@ export default class QuickStartDetail extends Component {
         automaticallyAdjustContentInsets={false}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}
+        
       >
         <List>
           <Item key={"title"}>
@@ -161,6 +162,7 @@ export default class QuickStartDetail extends Component {
           ref={(drawer) => { this.drawer = drawer; }}
           drawerWidth={200}
           drawerPosition={"right"}
+          open={false}
           renderNavigationView={() => this.genItemList()}>
           <ScrollView
             // style={{ flex: 1 }}

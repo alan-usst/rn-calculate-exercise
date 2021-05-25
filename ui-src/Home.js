@@ -4,6 +4,7 @@ import { Button, Provider, Toast, Icon, SearchBar, Badge, TabBar } from '@ant-de
 
 import QuickStart from './qs/QuickStart';
 import RecordList from './RecordList';
+import RecordStatistics from './RecordStatistics';
 import { RecordAPI } from '@api';
 
 export default class Home extends Component {
@@ -84,7 +85,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'exerciseStatisticsTab'}
             onPress={() => this.onChangeTab('exerciseStatisticsTab')}
           >
-            {this.renderContent('exerciseStatistics Tab')}
+            <RecordStatistics/>
           </TabBar.Item>
         </TabBar>
       </Provider>
