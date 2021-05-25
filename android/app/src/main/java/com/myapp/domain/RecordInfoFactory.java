@@ -68,7 +68,10 @@ public class RecordInfoFactory {
             // 获取第一个数
             int n1 = getRandomNum(param.getMaxNum());
             if(!OP.DIV.equals(op)){
-                int n2 = getRandomNum(n1);
+                int n2 = getRandomNum(param.getMaxNum());
+                if(OP.SUB.equals(op)){
+                    n2 = getRandomNum(n1);
+                }
                 return new Item(n1, n2, op);
             }
             // 如果是除法，一定要保证能够被整除

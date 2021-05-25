@@ -61,9 +61,6 @@ export default class RecordList extends Component {
         );
     };
 
-
-
-
     render() {
         const title = () => (<Item style={{ padding: 10 }}>
             <Flex justify="between" >
@@ -83,7 +80,7 @@ export default class RecordList extends Component {
         </Item>);
         return (
             <ListView
-                // legacyImplementation={true}
+                legacyImplementation={true}
                 header={title}
                 onFetch={this.onFetch}
                 keyExtractor={(item, index) =>
