@@ -39,6 +39,7 @@ export default class QuickStartDetail extends Component {
     RecordAPI.getDetailById(this.state.recordId, function (args) {
       refreshState(args);
     });
+    this.props.Home_Screen.refreshUnCompleteCount();
   }
 
   // getOpStr = (opEnum) => {

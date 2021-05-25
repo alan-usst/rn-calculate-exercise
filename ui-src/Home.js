@@ -17,16 +17,16 @@ export default class Home extends Component {
     };
   }
 
-  setUnCompleteCountState = (count)=>{
+  setUnCompleteCountState = (count) => {
     this.setState({ unCompleteCount: count })
   }
 
-  refreshUnCompleteCount = ()=>{
-    const {setUnCompleteCountState} = this;
+  refreshUnCompleteCount = () => {
+    const { setUnCompleteCountState } = this;
     RecordAPI.getUnCompleteRecordCount(function (args) {
       setUnCompleteCountState(args);
     });
-    
+
   }
 
   componentDidMount = () => {
@@ -69,11 +69,8 @@ export default class Home extends Component {
             <QuickStart navigation={this.props.navigation} />
           </TabBar.Item>
           <TabBar.Item
-            icon={unCompleteCount==0?<Icon name="table" />: 
-            <Badge text={unCompleteCount} overflowCount={100}>
-              <Icon name="table" />
-              </Badge> 
-              }
+            badge={unCompleteCount>10?"10+":unCompleteCount}
+            icon={<Icon name="table" />}
             title="练习记录"
             selected={this.state.selectedTab === 'recordListTab'}
             onPress={() => this.onChangeTab('recordListTab')}
@@ -86,7 +83,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'exerciseStatisticsTab'}
             onPress={() => this.onChangeTab('exerciseStatisticsTab')}
           >
-            <RecordStatistics/>
+            <RecordStatistics />
           </TabBar.Item>
         </TabBar>
       </Provider>
