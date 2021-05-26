@@ -48,7 +48,7 @@ export default class QuickStart extends Component {
   render() {
     return (
       <ScrollView
-        style={{ flex: 1 }}
+        style={{ flex: 1 , paddingTop: 30}}
         automaticallyAdjustContentInsets={false}
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
@@ -98,7 +98,7 @@ export default class QuickStart extends Component {
             </Flex.Item>
 
             {/* 最大运算值 */}
-            <Flex.Item style={{ paddingTop: 20 }}>
+            <Flex.Item style={{ paddingTop: 30 }}>
               <Text style={styles.titleText} >运算最大值
               </Text>
               <PickerView

@@ -172,7 +172,7 @@ export default class QuickStartDetail extends Component {
             automaticallyAdjustContentInsets={false}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
-            <WingBlank style={{ marginBottom: 0, marginTop: 5 }}>
+            <WingBlank style={{ marginBottom: 0, marginTop: 20 }}>
               <Flex direction="row" style={{ paddingTop: 20 }}>
                 <Flex.Item style={{ paddingLeft: 4 }}>
                   <Text style={{ color: '#000', fontSize: 15, fontWeight: 'bold' }}>总题数：{this.state.recordDetail == null ? 0 : this.state.recordDetail.itemAmount}</Text>
@@ -188,7 +188,7 @@ export default class QuickStartDetail extends Component {
                 </Flex.Item>
               </Flex>
 
-              <Flex direction="row" style={{ paddingTop: 50 }} justify='around' >
+              <Flex direction="row" style={{ paddingTop: 60 }} justify='around' >
                 <Flex.Item >
                   <Text style={{ color: '#000', fontSize: 23, fontWeight: 'bold', textAlign: 'center' }}>当前第 {this.state.itemIndex} 题</Text>
                 </Flex.Item>
@@ -204,7 +204,7 @@ export default class QuickStartDetail extends Component {
                 </Flex.Item>
               </Flex>
               {/*公式栏*/}
-              <View style={{ paddingTop: 50, alignItems: 'center', justifyContent: 'center' }}>
+              <View style={{ paddingTop: 60, alignItems: 'center', justifyContent: 'center' }}>
                 <Text style={{ color: '#000', fontSize: 40, fontWeight: 'bold' }}>{itemDetail == null ? null : `${itemDetail.n1}  ${getOpStr(itemDetail.op)}  ${itemDetail.n2}  =  ${filledAnswer == null ? ' ? ' : filledAnswer}`}</Text>
               </View>
 

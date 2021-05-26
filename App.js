@@ -12,18 +12,22 @@ const Stack = createStackNavigator();
 export default class App extends Component {
   render() {
     return (
-      <NavigationContainer>
+      <NavigationContainer
+      header={{visible:false}}
+      visible={false}
+      >
         <Stack.Navigator
+          headerMode={null}
           initialRouteName="home">
           <Stack.Screen
             name="home"
-            options={{ title: null }}
           >
             {props => <Home {...props} ref={(e) => this.Home_Screen = e} />}
           </Stack.Screen>
           <Stack.Screen
+          headerBackTitle={null}
             name="qs_detail"
-            options={{ title: null }}>
+            options={{ gesturesEnabled:true}}>
             {props => <QuickStartDetail {...props} Home_Screen={this.Home_Screen} />}
           </Stack.Screen>
         </Stack.Navigator>
