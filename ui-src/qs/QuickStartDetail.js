@@ -55,9 +55,14 @@ export default class QuickStartDetail extends Component {
     let statusColor = item.status == "RIGHT" ? "#07bd09" : (item.status == "WRONG" ? "#e10305" : "#b0b5bd");
     return (
       <Item key={item.index} onPress={() => this.changeItem(item.index)}>
-        <View style={{ flexDirection: 'row', color: statusColor }}>
-          <Icon name="edit" style={{ color: statusColor }} /><Text style={{ color: statusColor }}>【{item.index}】      {item.n1}  {getOpStr(item.op)} {item.n2}</Text>
-        </View>
+            <Flex justify="between" >
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{color: statusColor , textAlign: 'center' }}><Icon name="edit" style={{ color: statusColor }} />【{item.index}】</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{color: statusColor , textAlign: 'center' }}>{item.n1}  {getOpStr(item.op)} {item.n2}</Text>
+                </Flex.Item>
+            </Flex>
       </Item>
     );
   }
@@ -73,7 +78,14 @@ export default class QuickStartDetail extends Component {
       >
         <List>
           <Item key={"title"}>
-            <Text>题目序号              内容 </Text>
+          <Flex justify="between" >
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>题目序号</Text>
+                </Flex.Item>
+                <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                    <Text style={{ fontSize: 17, fontWeight: 'bold', textAlign: 'center' }}>内容</Text>
+                </Flex.Item>
+            </Flex>
           </Item>
           {items.map(element => {
             return this.genSingleItemInList(element);
@@ -150,7 +162,7 @@ export default class QuickStartDetail extends Component {
       <Provider>
         <Drawer
           drawerRef={el => (this.drawer = el)}
-          drawerWidth={200}
+          drawerWidth={250}
           position={"right"}
           open={false}
           sidebar={this.genItemList()}

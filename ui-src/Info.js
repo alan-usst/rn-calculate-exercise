@@ -41,11 +41,19 @@ const CONTENT_QA = [
         <Text>问：我不小心点了快速开始，创建了练习记录，但是我想删除该如何操作？</Text>{"\n"}
         <Text>答：在练习记录页，左滑单条记录，会展示删除按钮，如下图，点击删除即可。</Text>{"\n"}
         <View style={{alignItems:"center", justifyContent:'center', width: width}}>
-        <Image style={{width:300, height:80}} resizeMode="cover" source={require('../images/delete_record.png')}></Image>
+        <Image style={{width:300, height:150}} resizeMode="cover" source={require('../images/delete_record.png')}></Image>
         </View>
         
       </Text>
-  }
+  },
+  {
+    title: '如何理解练习记录中的进度',
+    content:
+      <Text>
+        <Text>问：在练习记录页，进度那一栏，三种颜色的数字代表什么？</Text>{"\n"}
+        <Text>答：绿色代表答对的题数，红色代表答错的题数，灰色代表还没有提交答案的题目数。如果该次训练记录内的题目没有完全答对，该进度前会展示一个橙色的小感叹号。</Text>
+      </Text>
+  },
 ]
 
 const CONTENT_OTHER = [
