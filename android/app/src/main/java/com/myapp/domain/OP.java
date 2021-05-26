@@ -24,6 +24,7 @@ public enum OP {
      */
     private final String symbol;
 
+
     public String getSymbol(){
         return this.symbol;
     }
