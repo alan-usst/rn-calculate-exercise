@@ -37,6 +37,24 @@ export default class RecordList extends Component {
         };
     }
 
+    // static propTypes = {
+    //     data: PropTypes.array,
+    //     keyExtractor: PropTypes.func,
+    //     onEndReached: PropTypes.func,
+    //     renderItem: PropTypes.func,
+    //     ItemSeparatorComponent: PropTypes.func,
+    //     ListEmptyComponent: PropTypes.func,
+    //     ListFooterComponent: PropTypes.func,
+    //     refreshing: PropTypes.bool,
+    //     colors: PropTypes.array,
+    //     progressBackgroundColor: PropTypes.string,
+    //     onRefresh: PropTypes.func,
+    //     animating: PropTypes.bool,
+    //     nomore: PropTypes.bool,
+    //     ItmeHeight: PropTypes.number,
+    
+    //   };
+
     //满屏页面判断
     fullScreenJusting = (ItemHeight) => {
         const screnHeight = height;     //屏幕高度
@@ -90,8 +108,50 @@ export default class RecordList extends Component {
         })
     }
 
+    _onEndReached = () => {
+        if (!this.state.nomore && this.onEndReachedCalled ) {
+          this.getOrderList(this.state.pageSize, ++this.state.pageNumber, false);
+        }
+        this.onEndReachedCalled=true;
+    
+      };
+
+    ListFooterComponent = () => {
+        return (
+          <View style={styles.bottomfoot}>
+            {
+              this.state.data.length != 0 ?
+                this.state.nomore ? (
+                  <Text style={styles.footText}>- 没有更多记录啦 -</Text>
+                ) : (
+                    <View style={styles.activeLoad}>
+                      <ActivityIndicator size="small" animating={this.state.animating} />
+                      <Text style={[styles.footText, styles.ml]}>加载更多...</Text>
+                    </View>
+                  )
+                :
+                null
+            }
+    
+          </View>
+        );
+      };
+      //为空时
+      ListEmptyComponent=()=>{
+        return (
+          <View style={styles.noListView}>
+            {/* <Image
+              style={styles.noListImage}
+              source={require('../images/status/order_no_record.png')}
+            /> */}
+            <Text style={styles.NoListText}>暂无练习记录</Text>
+          </View>
+        );
+      }
+
     getOrderList = (ListNums, pageNumber, fresh) => {
         let nomore;
+        console.log("pageNumber", pageNumber)
         const { setStateDataNomoreInfo } = this;
         const { data } = this.state;
         RecordAPI.getOverviewList(pageNumber, ListNums, function (args) {
@@ -156,15 +216,21 @@ export default class RecordList extends Component {
             </Flex>
         </Item>);
         return (
-            <View>
+            <View style={{ paddingBottom: 70 }}>
                 {title()}
-                <FlatList style={{ marginBottom: 30 }}
+                <FlatList 
                     //加载数据源
                     data={this.state.data}
                     //展示数据
                     renderItem={({ index, item }) => this.renderItem(item)}
                     //默认情况下每行都需要提供一个不重复的key属性
                     keyExtractor={(item, index) => (item.id)}
+                    //空值时的数据
+                    ListEmptyComponent={this.ListEmptyComponent}
+                    //底部栏
+                    ListFooterComponent={this.ListFooterComponent}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={this._onEndReached}
                     //刷新
                     refreshControl={
                         <RefreshControl
@@ -182,3 +248,58 @@ export default class RecordList extends Component {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    listConten: {
+      flex: 1,
+      backgroundColor: '#ffffff',
+    },
+    item: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: "center",
+      backgroundColor: '#ffffff',
+      height: 50,
+    },
+    baseLine: {
+      width: width,
+      height: 1,
+      backgroundColor: '#eeeeee',
+    },
+    noListView: {
+      width: width,
+      height: height - 140,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    NoListText: {
+      marginTop: 15,
+      fontSize: 18,
+      color: '#999999',
+    },
+    noListImage: {
+      width: 130,
+      height: 140,
+    },
+    bottomfoot: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 10,
+    },
+    footText: {
+      marginTop: 5,
+      fontSize: 12,
+      color: '#999999',
+    },
+  
+    activeLoad: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    ml: {
+      marginLeft: 10,
+    },
+  });
+  
