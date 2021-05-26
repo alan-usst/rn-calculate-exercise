@@ -6,7 +6,8 @@ import {
     View,
     Image,
     TouchableOpacity,
-    AlertIOS,
+    RefreshControl,
+    ActivityIndicator,
     Dimensions
 } from 'react-native';
 import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design/react-native';
@@ -19,23 +20,43 @@ const Item = List.Item;
 
 var width = Dimensions.get('window').width;
 
+var height = Dimensions.get('window').height;
+
 
 export default class RecordList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rows: []
+            data: [],
+            refreshing: false,
+            fresh: true,
+            animating: true,
+            nomore: false,
+            pageSize: 0,
+            pageNumber: 1,
         };
     }
-    setStateInfo = (rows) => {
-        this.setState({ rows: rows });
+
+    //满屏页面判断
+    fullScreenJusting = (ItemHeight) => {
+        const screnHeight = height;     //屏幕高度
+        console.log("屏幕高度", screnHeight);
+        //计算列表个数
+        const listNum = (screnHeight - 40) / ItemHeight;
+        console.log("listNum", listNum)
+        return Math.ceil(listNum);
+    }
+
+    setStateDataNomoreInfo = (data, nomore) => {
+        this.setState({ data: data, nomore: nomore });
     }
     componentDidMount = () => {
-        const { setStateInfo } = this;
-        RecordAPI.getOverviewList(1, 100, function (args) {
-            let rowData = JSON.parse(args);
-            setStateInfo(rowData);
-        });
+        const ListNums = this.fullScreenJusting(50);
+        this.setState({
+            pageSize: ListNums
+        })
+        this.onEndReachedCalled = false;
+        this.getOrderList(ListNums, 1, true);
     }
 
     // 滑动按钮
@@ -48,8 +69,8 @@ export default class RecordList extends Component {
     ]
 
     removeRcordInState = (recordId) => {
-        const {rows} = this.state;
-        this.setState({rows: rows.filter(item=>item.id!==recordId)});
+        const { data } = this.state;
+        this.setState({ data: data.filter(item => item.id !== recordId) });
     }
 
     deleteRecord = (recordId) => {
@@ -63,21 +84,30 @@ export default class RecordList extends Component {
         });
     }
 
-    onFetch = async (
-        page = 1,
-        startFetch,
-        abortFetch
-    ) => {
-        try {
-            let pageLimit = 10;
-            RecordAPI.getOverviewList(page, pageLimit, function (args) {
-                let rowData = JSON.parse(args);
-                startFetch(rowData, pageLimit);
-            });
-        } catch (err) {
-            abortFetch(); //manually stop the refresh or pagination if it encounters network error
-        }
-    };
+    _onRefresh = () => {
+        this.setState({ nomore: false, pageNumber: 1 }, () => {
+            this.getOrderList(this.state.pageSize, 1, true);
+        })
+    }
+
+    getOrderList = (ListNums, pageNumber, fresh) => {
+        let nomore;
+        const { setStateDataNomoreInfo } = this;
+        const { data } = this.state;
+        RecordAPI.getOverviewList(pageNumber, ListNums, function (args) {
+            let dataNew = JSON.parse(args);
+            if (dataNew.length < ListNums) {
+                nomore = true
+            } else {
+                nomore = false
+            }
+            if (fresh) {
+                setStateDataNomoreInfo(dataNew, nomore);
+            } else {
+                setStateDataNomoreInfo(data.concat(dataNew), nomore);
+            }
+        });
+    }
 
     go2RecordDetail = (recordId) => {
         this.props.navigation.navigate('qs_detail', { recordId: recordId });
@@ -128,31 +158,27 @@ export default class RecordList extends Component {
         return (
             <View>
                 {title()}
-            <FlatList style={{marginBottom:30}}
-                //加载数据源
-                data={this.state.rows}
-                //展示数据
-                renderItem={({ index, item }) => this.renderItem(item)}
-                //默认情况下每行都需要提供一个不重复的key属性
-                keyExtractor={(item, index) => (item.id)}
-            />  
+                <FlatList style={{ marginBottom: 30 }}
+                    //加载数据源
+                    data={this.state.data}
+                    //展示数据
+                    renderItem={({ index, item }) => this.renderItem(item)}
+                    //默认情况下每行都需要提供一个不重复的key属性
+                    keyExtractor={(item, index) => (item.id)}
+                    //刷新
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            colors={['#ff0000', '#00ff00', '#0000ff']}
+                            progressBackgroundColor={"#ffffff"}
+                            onRefresh={() => {
+                                this._onRefresh();
+                            }}
+                        />
+                    }
+                />
 
             </View>
-            
-            // <ListView
-            //     legacyImplementation={true}
-            //     header={title}
-            //     onFetch={this.onFetch}
-            //     keyExtractor={(item, index) =>
-            //         item.id
-            //     }
-            //     allLoadedText={'没有更多数据了'}
-            //     waitingSpinnerText={'加载中...'}
-            //     // refreshable={true}
-            //     renderItem={this.renderItem}
-            //     numColumns={1}
-            // >
-            // </ListView>
         );
     }
 }
