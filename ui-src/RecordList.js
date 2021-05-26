@@ -4,8 +4,10 @@ import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design
 
 import { RecordAPI } from '@api';
 import { getOpListStr } from '@util';
+import Swipeout from "react-native-swipeout";
 
 const Item = List.Item;
+
 
 export default class RecordList extends Component {
     constructor(props) {
@@ -13,6 +15,27 @@ export default class RecordList extends Component {
         this.state = {
         };
     }
+
+    // 滑动按钮
+    swipeoutBtns = (recordId) => [
+        {
+            text: '删除',
+            type: 'delete',
+            onPress: ()=>this.deleteRecord(recordId)
+        }
+    ]
+
+    deleteRecord = (recordId)=>{
+        const {onFetch} = this;
+        RecordAPI.delete(recordId, function (deleteCount) {
+            if(deleteCount<1){
+                Toast.fail("系统异常，删除失败", 1);
+                return;
+            }
+            onFetch();
+        });
+    }
+
     onFetch = async (
         page = 1,
         startFetch,
@@ -21,10 +44,7 @@ export default class RecordList extends Component {
         try {
             let pageLimit = 10;
             RecordAPI.getOverviewList(page, pageLimit, function (args) {
-                console.log("pageIndex", page)
-                console.log("pageLimit", pageLimit)
                 let rowData = JSON.parse(args);
-                console.log("rowData", rowData)
                 startFetch(rowData, pageLimit);
             });
         } catch (err) {
@@ -40,22 +60,24 @@ export default class RecordList extends Component {
 
         let undoCount = item.itemAmount - item.rightCount - item.wrongCount;
         return (
-            <Item key={item.id} onPress={() => this.go2RecordDetail(item.id)}>
-                <Flex justify="between" >
-                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{item.createTime}</Text>
-                    </Flex.Item>
-                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{getOpListStr(item.ops).join("  ")}</Text>
-                    </Flex.Item>
-                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
-                    </Flex.Item>
-                    <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
-                        <Text style={{ textAlign: 'center' }}>{item.rightCount < item.itemAmount ? (<Text><Icon color="#f90" size={12} name="info-circle" />  </Text>) : null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
-                    </Flex.Item>
-                </Flex>
-            </Item>
+            <Swipeout right={this.swipeoutBtns(item.id)} >
+                <Item key={item.id} onPress={() => this.go2RecordDetail(item.id)}>
+                    <Flex justify="between" >
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{ textAlign: 'center' }}>{item.createTime}</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{ textAlign: 'center' }}>{getOpListStr(item.ops).join("  ")}</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{ textAlign: 'center' }}>{item.itemAmount}</Text>
+                        </Flex.Item>
+                        <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
+                            <Text style={{ textAlign: 'center' }}>{item.rightCount < item.itemAmount ? (<Text><Icon color="#f90" size={12} name="info-circle" />  </Text>) : null}<Text style={{ color: '#00ce00' }}>{item.rightCount}</Text>/<Text style={{ color: '#fa2e3e' }}>{item.wrongCount}</Text>/<Text style={{ color: '#bbbcbf' }}>{undoCount}</Text></Text>
+                        </Flex.Item>
+                    </Flex>
+                </Item>
+            </Swipeout>
         );
     };
 

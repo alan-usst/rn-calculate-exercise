@@ -95,4 +95,10 @@ public class RecordAPI extends ReactContextBaseJavaModule {
         long count = RecordRepository.getUnCompleteRecordCount();
         callback.invoke(Integer.valueOf(String.valueOf(count)));
     }
+
+    @ReactMethod
+    public static void delete(int recordId, Callback callback) {
+        int deleteCount = RecordRepository.delete(recordId);
+        callback.invoke(deleteCount);
+    }
 }

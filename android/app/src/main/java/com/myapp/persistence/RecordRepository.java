@@ -35,6 +35,12 @@ public class RecordRepository {
         return record;
     }
 
+    public static int delete(int recordId) {
+        SQLiteDatabase db = MainActivity.getDatabase();
+        int deleteCount = db.delete(DBRecordConstant.TABLE_NAME, String.format("%s = ?", DBRecordConstant.COLUMN_ID), new String[]{String.valueOf(recordId)});
+        return deleteCount;
+    }
+
     /**
      * 更新题目内容，同时更新正确数和错误数
      *
