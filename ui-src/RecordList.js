@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { AppRegistry, Text, View } from 'react-native';
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    AlertIOS,
+    Dimensions
+} from 'react-native';
 import { Button, Provider, Toast, Icon, Flex, ListView, List } from '@ant-design/react-native';
 
 import { RecordAPI } from '@api';
@@ -8,12 +17,25 @@ import Swipeout from "react-native-swipeout";
 
 const Item = List.Item;
 
+var width = Dimensions.get('window').width;
+
 
 export default class RecordList extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            rows: []
         };
+    }
+    setStateInfo = (rows) => {
+        this.setState({ rows: rows });
+    }
+    componentDidMount = () => {
+        const { setStateInfo } = this;
+        RecordAPI.getOverviewList(1, 100, function (args) {
+            let rowData = JSON.parse(args);
+            setStateInfo(rowData);
+        });
     }
 
     // 滑动按钮
@@ -21,18 +43,23 @@ export default class RecordList extends Component {
         {
             text: '删除',
             type: 'delete',
-            onPress: ()=>this.deleteRecord(recordId)
+            onPress: () => this.deleteRecord(recordId)
         }
     ]
 
-    deleteRecord = (recordId)=>{
-        const {onFetch} = this;
+    removeRcordInState = (recordId) => {
+        const {rows} = this.state;
+        this.setState({rows: rows.filter(item=>item.id!==recordId)});
+    }
+
+    deleteRecord = (recordId) => {
+        const { removeRcordInState } = this;
         RecordAPI.delete(recordId, function (deleteCount) {
-            if(deleteCount<1){
+            if (deleteCount < 1) {
                 Toast.fail("系统异常，删除失败", 1);
                 return;
             }
-            onFetch();
+            removeRcordInState(recordId);
         });
     }
 
@@ -60,7 +87,7 @@ export default class RecordList extends Component {
 
         let undoCount = item.itemAmount - item.rightCount - item.wrongCount;
         return (
-            <Swipeout right={this.swipeoutBtns(item.id)} >
+            <Swipeout key={"swipeout_" + item.id} right={this.swipeoutBtns(item.id)} >
                 <Item key={item.id} onPress={() => this.go2RecordDetail(item.id)}>
                     <Flex justify="between" >
                         <Flex.Item style={{ paddingLeft: 4, paddingRight: 4 }}>
@@ -99,20 +126,33 @@ export default class RecordList extends Component {
             </Flex>
         </Item>);
         return (
-            <ListView
-                legacyImplementation={true}
-                header={title}
-                onFetch={this.onFetch}
-                keyExtractor={(item, index) =>
-                    item.id
-                }
-                allLoadedText={'没有更多数据了'}
-                waitingSpinnerText={'加载中...'}
-                // refreshable={true}
-                renderItem={this.renderItem}
-                numColumns={1}
-            >
-            </ListView>
+            <View>
+                {title()}
+            <FlatList style={{marginBottom:30}}
+                //加载数据源
+                data={this.state.rows}
+                //展示数据
+                renderItem={({ index, item }) => this.renderItem(item)}
+                //默认情况下每行都需要提供一个不重复的key属性
+                keyExtractor={(item, index) => (item.id)}
+            />  
+
+            </View>
+            
+            // <ListView
+            //     legacyImplementation={true}
+            //     header={title}
+            //     onFetch={this.onFetch}
+            //     keyExtractor={(item, index) =>
+            //         item.id
+            //     }
+            //     allLoadedText={'没有更多数据了'}
+            //     waitingSpinnerText={'加载中...'}
+            //     // refreshable={true}
+            //     renderItem={this.renderItem}
+            //     numColumns={1}
+            // >
+            // </ListView>
         );
     }
 }
