@@ -1,24 +1,49 @@
 import React from 'react';
 import {
-  Switch,
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { Accordion, List, WingBlank } from '@ant-design/react-native';
 import Constants from 'expo-constants';
 import * as Animatable from 'react-native-animatable';
 import Collapsible from 'react-native-collapsible';
 
+var width = Dimensions.get('window').width;
+
+var height = Dimensions.get('window').height;
+
 const CONTENT_QA = [
   {
-    title: '题目数量不对',
+    title: '为什么题目数量不对',
     content:
       <Text>
         <Text>问：我选择了20道题，为什么最后只生成了15道？</Text>{"\n"}
-        <Text>答：选择好题量后，题目是随机生成的，会去掉一些重复的题，且由于一些限制因素也会去掉一些题，所以最终总数量会相应减少。限制因素：1.减法题必须保证计算结果为非负数（目前不开放负数相关的计算）；2.除法题需要保证被除数能被整除（结果不能是小数）</Text>
+        <Text>答：选择好题量后，题目是随机生成的，会去掉一些重复的题，且由于一些限制因素也会去掉一些题，所以最终总数量会相应减少。限制因素：1.减法题必须保证计算结果为非负数（目前不开放负数相关的计算）；2.除法题需要保证被除数能被整除（结果不能是小数）。</Text>
+      </Text>
+  },
+  {
+    title: '如何找到原有的练习记录',
+    content:
+      <Text>
+        <Text>问：在题目训练页不小心退出了，该如何找到原有的练习记录呢？</Text>{"\n"}
+        <Text>答：在练习记录页，点击单条练习记录，即可进入训练页。在训练页中点击'查看题目列表'按钮，选中对应的题目即可。</Text>
+      </Text>
+  },
+  {
+    title: '如何删除已创建的练习记录',
+    content:
+      <Text>
+        <Text>问：我不小心点了快速开始，创建了练习记录，但是我想删除该如何操作？</Text>{"\n"}
+        <Text>答：在练习记录页，左滑单条记录，会展示删除按钮，如下图，点击删除即可。</Text>{"\n"}
+        <View style={{alignItems:"center", justifyContent:'center', width: width}}>
+        <Image style={{width:300, height:80}} resizeMode="cover" source={require('../images/delete_record.png')}></Image>
+        </View>
+        
       </Text>
   }
 ]
@@ -38,7 +63,7 @@ const CONTENT_OTHER = [
   {
     title: '建议意见',
     content:
-      <Text>第一次写RN，肯定存在诸多问题。如有任何建议和意见请通过以下方式联系反馈，邮件：chenlin.usst@gmail.com 或微信：abc444873863</Text>
+      <Text>第一次写React Native，存在诸多问题。如有任何建议和意见请通过以下方式联系反馈，邮件：chenlin.usst@gmail.com 或微信：abc444873863</Text>
   },
   {
     title: '招贤纳士',
@@ -46,7 +71,7 @@ const CONTENT_OTHER = [
   },
   {
     title: '感谢',
-    content: <Text>感谢三之三幼儿园的费老师等人，给了我做该小应用的启发</Text>,
+    content: <Text>感谢闲湖城三之三幼儿园的费老师等人，给了我做该小应用的启发</Text>,
   }
 ];
 
