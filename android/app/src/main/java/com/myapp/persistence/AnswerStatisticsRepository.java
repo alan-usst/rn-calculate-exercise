@@ -61,7 +61,7 @@ public class AnswerStatisticsRepository {
             res = null;
         }
         cursor.close();
-        db.close();
+//        db.close();
         return res;
     }
 
@@ -82,6 +82,7 @@ public class AnswerStatisticsRepository {
                 item.setSubmitTime(submitTime);
                 item.setRightCount(rightCount);
                 item.setWrongCount(wrongCount);
+                res.add(item);
                 //移动到下一个
                 cursor.moveToNext();
             }

@@ -45,8 +45,10 @@ export default class RecordStatistics extends React.Component {
       return ele.submitTime;
     });
     let dayData = info.days.map(ele=>{
-      return [ele.rightCountm, ele.wrongCount];
+      return [ele.rightCount, ele.wrongCount];
     })
+    console.log("dayTimes", dayTimes)
+    console.log("dayData", dayData)
     this.setState({totalRightCount:info.totalRightCount,totalWrongCount:info.totalWrongCount, dayTimes:dayTimes, dayData:dayData});
   }
 
