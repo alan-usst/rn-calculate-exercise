@@ -40,21 +40,18 @@ export default class RecordStatistics extends React.Component {
   ]
 
   refreshState = (info)=>{
-    console.log("info", info)
     let dayTimes = info.days.map(ele => {
       return ele.submitTime;
     });
     let dayData = info.days.map(ele=>{
       return [ele.rightCount, ele.wrongCount];
     })
-    console.log("dayTimes", dayTimes)
-    console.log("dayData", dayData)
     this.setState({totalRightCount:info.totalRightCount,totalWrongCount:info.totalWrongCount, dayTimes:dayTimes, dayData:dayData});
   }
 
   componentDidMount = () => {
     const {refreshState} = this;
-    StatisticsAPI.getOverviewList(7, function (res) {
+    StatisticsAPI.getOverviewList(3, function (res) {
       res = JSON.parse(res);
       refreshState(res);
   });
@@ -67,6 +64,7 @@ export default class RecordStatistics extends React.Component {
             <Flex.Item>
               <Text style={styles.title}>最近答题统计</Text>
               <StackedBarChart
+                decimalPlaces={0}
                 style={chartConfig.style}
                 data={this.data()}
                 width={screenWidth}
@@ -118,7 +116,7 @@ const chartConfig = {
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   strokeWidth: 3, // optional, default 3
-  barPercentage: 0.7,
+  barPercentage: 0.9,
   barRadius: 3,
   useShadowColorFromDataset: false, // optional
   style: {
