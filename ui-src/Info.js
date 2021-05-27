@@ -51,7 +51,7 @@ const CONTENT_QA = [
     content:
       <Text>
         <Text>问：在练习记录页，进度那一栏，三种颜色的数字代表什么？</Text>{"\n"}
-        <Text>答：绿色代表答对的题数，红色代表答错的题数，灰色代表还没有提交答案的题目数。如果该次训练记录内的题目没有完全答对，该进度前会展示一个橙色的小感叹号。</Text>
+        <Text>答：<Text style={{color:'#07bd09'}}>绿色</Text>代表答对的题数，<Text style={{color:'#e10305'}}>红色</Text>代表答错的题数，<Text style={{color:'b0b5bd'}}>灰色</Text>代表还没有提交答案的题目数。如果该次训练记录内还存在没有答对的题目，该进度前会展示一个<Text style={{color:'#f90'}}>橙色</Text>的小感叹号。</Text>
       </Text>
   },
 ]
@@ -71,7 +71,7 @@ const CONTENT_OTHER = [
   {
     title: '建议意见',
     content:
-      <Text>第一次写React Native，存在诸多问题。如有任何建议和意见请通过以下方式联系反馈，邮件：chenlin.usst@gmail.com 或微信：abc444873863</Text>
+      <Text>第一次写React Native，存在诸多不完善的地方。如有任何建议和意见请通过以下方式联系反馈，邮件：chenlin.usst@gmail.com 或微信：abc444873863</Text>
   },
   {
     title: '招贤纳士',

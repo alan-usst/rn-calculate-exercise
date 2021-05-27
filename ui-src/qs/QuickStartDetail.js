@@ -52,7 +52,7 @@ export default class QuickStartDetail extends Component {
 
   genSingleItemInList = (item) => {
     // 题目列表中的状态，答对的为绿色，答错为红色
-    let statusColor = item.status == "RIGHT" ? "#07bd09" : (item.status == "WRONG" ? "#e10305" : "#b0b5bd");
+    let statusColor = item.status == "RIGHT" ? "#07bd09" : (item.status == "WRONG" ? "#07bd09" : "#b0b5bd");
     return (
       <Item key={item.index} onPress={() => this.changeItem(item.index)}>
             <Flex justify="between" >
