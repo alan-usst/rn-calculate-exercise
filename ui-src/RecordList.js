@@ -93,12 +93,15 @@ export default class RecordList extends Component {
 
     deleteRecord = (recordId) => {
         const { removeRcordInState } = this;
+        const {Home_Screen} = this.props;
+        console.log("this.props",this.props);
         RecordAPI.delete(recordId, function (deleteCount) {
             if (deleteCount < 1) {
                 Toast.fail("系统异常，删除失败", 1);
                 return;
             }
             removeRcordInState(recordId);
+            Home_Screen.refreshUnCompleteCount();
         });
     }
 

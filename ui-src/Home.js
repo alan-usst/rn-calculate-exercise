@@ -5,7 +5,7 @@ import { Button, Provider, Toast, Icon, SearchBar, Badge, TabBar } from '@ant-de
 import QuickStart from './qs/QuickStart';
 import RecordList from './RecordList';
 import RecordStatistics from './RecordStatistics';
-import {Info} from './index';
+import Info from './Info';
 import { RecordAPI } from '@api';
 
 export default class Home extends Component {
@@ -76,7 +76,7 @@ export default class Home extends Component {
             selected={this.state.selectedTab === 'recordListTab'}
             onPress={() => this.onChangeTab('recordListTab')}
           >
-            <RecordList navigation={this.props.navigation} />
+            <RecordList navigation={this.props.navigation} Home_Screen={this} />
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="area-chart" />}

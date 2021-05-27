@@ -20,4 +20,6 @@ target 'myapp' do
   # end
   pod 'react-native-pager-view', :path => '../node_modules/react-native-pager-view'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
 end
