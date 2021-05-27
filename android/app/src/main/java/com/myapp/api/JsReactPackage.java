@@ -17,6 +17,7 @@ public class JsReactPackage implements ReactPackage {
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new Test(reactContext));
         modules.add(new RecordAPI(reactContext));
+        modules.add(new StatisticsAPI(reactContext));
         return modules;
     }
 

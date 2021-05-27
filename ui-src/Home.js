@@ -80,7 +80,7 @@ export default class Home extends Component {
           </TabBar.Item>
           <TabBar.Item
             icon={<Icon name="area-chart" />}
-            title="练习统计"
+            title="答题统计"
             selected={this.state.selectedTab === 'exerciseStatisticsTab'}
             onPress={() => this.onChangeTab('exerciseStatisticsTab')}
           >

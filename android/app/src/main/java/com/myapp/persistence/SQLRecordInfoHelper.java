@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.myapp.common.DBAnswerStatisticsConstant;
 import com.myapp.common.DBRecordConstant;
 
 public class SQLRecordInfoHelper  extends SQLiteOpenHelper {
@@ -18,6 +19,12 @@ public class SQLRecordInfoHelper  extends SQLiteOpenHelper {
             + String.format("%s integer,", DBRecordConstant.COLUMN_WRONG_COUNT)
             + String.format("%s text)", DBRecordConstant.COLUMN_ITEMS);
 
+    public static final String CREATE_ANSWER_STATISTICS = "create table answerStatistics ( "
+            + String.format("%s integer primary key autoincrement,", DBAnswerStatisticsConstant.COLUMN_ID)
+            + String.format("%s text,", DBAnswerStatisticsConstant.COLUMN_SUBMIT_TIME)
+            + String.format("%s integer,", DBAnswerStatisticsConstant.COLUMN_RIGHT_COUNT)
+            + String.format("%s integer)", DBAnswerStatisticsConstant.COLUMN_WRONG_COUNT);
+
     private Context context;
 
 
@@ -29,12 +36,14 @@ public class SQLRecordInfoHelper  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_RECORD_INFO);
+        db.execSQL(CREATE_ANSWER_STATISTICS);
     }
 
     //当打开数据库时传入的版本号与当前的版本号不同时会调用该方法
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop table if exists record");
+        db.execSQL("drop table if exists answerStatistics");
         onCreate(db);
     }
 }

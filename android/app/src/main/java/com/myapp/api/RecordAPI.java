@@ -15,6 +15,7 @@ import com.myapp.domain.OP;
 import com.myapp.domain.Record;
 import com.myapp.domain.RecordInfoFactory;
 import com.myapp.params.CreateRecordParam;
+import com.myapp.persistence.AnswerStatisticsRepository;
 import com.myapp.persistence.RecordRepository;
 
 import org.jetbrains.annotations.NotNull;
@@ -87,6 +88,7 @@ public class RecordAPI extends ReactContextBaseJavaModule {
         item.judge();
         // 提交数据库
         Record newRecord = RecordRepository.submitSingleItem(record);
+        AnswerStatisticsRepository.add(Item.Status.RIGHT.equals(item.getStatus()));
         callback.invoke(JSON.toJSONString(newRecord));
     }
 

@@ -54,7 +54,7 @@ public class RecordRepository {
         values.put(DBRecordConstant.COLUMN_WRONG_COUNT, statisticsInfo.getWrongCount());
         values.put(DBRecordConstant.COLUMN_ITEMS, JSON.toJSONString(record.getItems()));
         db.update(DBRecordConstant.TABLE_NAME, values, String.format("%s = ?", DBRecordConstant.COLUMN_ID), new String[]{record.getId().toString()});
-        db.close();
+//        db.close();
         return getById(record.getId());
     }
 
@@ -130,7 +130,7 @@ public class RecordRepository {
                 record.setWrongCount(wrongCount);
                 record.setMaxNum(maxNum);
                 res.add(record);
-                //移动到首位
+                //移动到下一个
                 cursor.moveToNext();
             }
         }

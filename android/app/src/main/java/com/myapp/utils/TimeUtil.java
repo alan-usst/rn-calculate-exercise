@@ -13,4 +13,10 @@ public class TimeUtil {
         String timeNow = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(currentTime);
         return timeNow;
     }
+
+    public static String getNowDateStr() {
+        long currentTime = System.currentTimeMillis();
+        String timeNow = new SimpleDateFormat("yyyy-MM-dd").format(currentTime);
+        return timeNow;
+    }
 }
